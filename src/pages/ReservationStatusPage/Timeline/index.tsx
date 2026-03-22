@@ -21,7 +21,22 @@ export function Timeline() {
         `}
       >
         <TimelineHeader />
-        <Suspense fallback={null}>
+        <Suspense
+          fallback={
+            <div
+              css={css`
+                height: 280px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+              `}
+            >
+              <Text typography="t7" color={colors.grey400}>
+                로딩 중...
+              </Text>
+            </div>
+          }
+        >
           <TimelineBody />
         </Suspense>
       </div>
