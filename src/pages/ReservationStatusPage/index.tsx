@@ -1,13 +1,9 @@
 import { css } from '@emotion/react';
 import { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
 import { Top, Spacing, Border, Button } from '_tosslib/components';
 import { colors } from '_tosslib/constants/colors';
-import { getRooms, getReservations } from 'pages/remotes';
-import { formatDate } from 'pages/utils';
 import { sectionPadding } from 'pages/styles';
-import { Room, Reservation } from 'pages/types';
 import { MessageBanner } from 'pages/MessageBanner';
 import { DateSelector } from './DateSelector';
 import { Timeline } from './Timeline';
@@ -16,8 +12,6 @@ import { MyReservationList } from './MyReservationList';
 export function ReservationStatusPage() {
   const navigate = useNavigate();
   const location = useLocation();
-  const [date, setDate] = useState(formatDate(new Date()));
-
   const locationState = location.state as { message?: string } | null;
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(
     locationState?.message ? { type: 'success', text: locationState.message } : null
@@ -28,11 +22,6 @@ export function ReservationStatusPage() {
       window.history.replaceState({}, '');
     }
   }, [locationState]);
-
-  const { data: rooms = [] } = useQuery<Room[]>(['rooms'], getRooms);
-  const { data: reservations = [] } = useQuery<Reservation[]>(['reservations', date], () => getReservations(date), {
-    enabled: !!date,
-  });
 
   return (
     <div
@@ -53,7 +42,7 @@ export function ReservationStatusPage() {
       <Spacing size={24} />
 
       <div css={sectionPadding}>
-        <DateSelector value={date} onChange={setDate} />
+        <DateSelector />
       </div>
 
       <Spacing size={24} />
@@ -61,7 +50,7 @@ export function ReservationStatusPage() {
       <Spacing size={24} />
 
       <div css={sectionPadding}>
-        <Timeline rooms={rooms} reservations={reservations} />
+        <Timeline />
       </div>
 
       <Spacing size={24} />
@@ -76,7 +65,7 @@ export function ReservationStatusPage() {
       )}
 
       <div css={sectionPadding}>
-        <MyReservationList rooms={rooms} onMessage={setMessage} />
+        <MyReservationList onMessage={setMessage} />
       </div>
 
       <Spacing size={24} />

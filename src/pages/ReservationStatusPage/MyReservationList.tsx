@@ -3,16 +3,16 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Spacing, Text, Button, ListRow } from '_tosslib/components';
 import { colors } from '_tosslib/constants/colors';
 import { EQUIPMENT_LABELS } from 'pages/constants';
-import { Room } from 'pages/types';
 import { getMyReservations, cancelReservation } from 'pages/remotes';
+import { useRoomsQuery } from 'pages/useRoomsQuery';
 
 interface MyReservationListProps {
-  rooms: Room[];
   onMessage: (message: { type: 'success' | 'error'; text: string }) => void;
 }
 
-export function MyReservationList({ rooms, onMessage }: MyReservationListProps) {
+export function MyReservationList({ onMessage }: MyReservationListProps) {
   const queryClient = useQueryClient();
+  const { data: rooms = [] } = useRoomsQuery();
   const { data: myReservations = [] } = useQuery(['myReservations'], getMyReservations);
 
   const cancelMutation = useMutation((id: string) => cancelReservation(id), {
