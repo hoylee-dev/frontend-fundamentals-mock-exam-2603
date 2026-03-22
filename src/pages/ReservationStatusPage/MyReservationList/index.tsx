@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import { Spacing } from '_tosslib/components';
 import { MyReservationHeader } from './MyReservationHeader';
 import { MyReservationContent } from './MyReservationContent';
@@ -5,9 +6,13 @@ import { MyReservationContent } from './MyReservationContent';
 export function MyReservationList() {
   return (
     <div>
-      <MyReservationHeader />
+      <Suspense fallback={null}>
+        <MyReservationHeader />
+      </Suspense>
       <Spacing size={16} />
-      <MyReservationContent />
+      <Suspense fallback={null}>
+        <MyReservationContent />
+      </Suspense>
     </div>
   );
 }

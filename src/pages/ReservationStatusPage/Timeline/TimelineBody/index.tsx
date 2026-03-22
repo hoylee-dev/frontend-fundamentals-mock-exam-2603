@@ -1,8 +1,8 @@
-import { useRoomsQuery } from 'pages/useRoomsQuery';
+import { useRoomsSuspenseQuery } from 'pages/useRoomsQuery';
 import { TimelineRow } from './TimelineRow';
 
 export function TimelineBody() {
-  const { data: rooms = [] } = useRoomsQuery();
+  const { data: rooms } = useRoomsSuspenseQuery();
   return (
     <>
       {rooms.map((room, index) => (

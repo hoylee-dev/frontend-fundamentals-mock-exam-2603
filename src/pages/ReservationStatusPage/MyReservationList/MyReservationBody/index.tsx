@@ -1,10 +1,13 @@
 import { css } from '@emotion/react';
-import { useQuery } from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { getMyReservations } from 'pages/remotes';
 import { MyReservationCard } from './MyReservationCard';
 
 export function MyReservationBody() {
-  const { data: myReservations = [] } = useQuery({ queryKey: ['myReservations'], queryFn: getMyReservations });
+  const { data: myReservations } = useSuspenseQuery({
+    queryKey: ['myReservations'],
+    queryFn: getMyReservations,
+  });
 
   return (
     <div

@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import { css } from '@emotion/react';
 import { Spacing, Text } from '_tosslib/components';
 import { colors } from '_tosslib/constants/colors';
@@ -20,7 +21,9 @@ export function Timeline() {
         `}
       >
         <TimelineHeader />
-        <TimelineBody />
+        <Suspense fallback={null}>
+          <TimelineBody />
+        </Suspense>
       </div>
     </div>
   );

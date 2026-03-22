@@ -1,11 +1,11 @@
 import { css } from '@emotion/react';
-import { useQuery } from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { Text } from '_tosslib/components';
 import { colors } from '_tosslib/constants/colors';
 import { getMyReservations } from 'pages/remotes';
 
 export function MyReservationHeader() {
-  const { data: myReservations = [] } = useQuery({ queryKey: ['myReservations'], queryFn: getMyReservations });
+  const { data: myReservations } = useSuspenseQuery({ queryKey: ['myReservations'], queryFn: getMyReservations });
 
   return (
     <div

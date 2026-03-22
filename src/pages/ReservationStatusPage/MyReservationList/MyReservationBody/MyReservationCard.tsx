@@ -3,7 +3,7 @@ import { Button, ListRow } from '_tosslib/components';
 import { colors } from '_tosslib/constants/colors';
 import { EQUIPMENT_LABELS } from 'pages/constants';
 import { Reservation } from 'pages/types';
-import { useRoomsQuery } from 'pages/useRoomsQuery';
+import { useRoomsSuspenseQuery } from 'pages/useRoomsQuery';
 import { useCancelReservation } from './useCancelReservation';
 
 interface MyReservationCardProps {
@@ -12,7 +12,7 @@ interface MyReservationCardProps {
 
 export function MyReservationCard({ reservation }: MyReservationCardProps) {
   const { handleCancel } = useCancelReservation();
-  const { data: rooms = [] } = useRoomsQuery();
+  const { data: rooms } = useRoomsSuspenseQuery();
   const roomName = rooms.find(r => r.id === reservation.roomId)?.name ?? reservation.roomId;
 
   return (

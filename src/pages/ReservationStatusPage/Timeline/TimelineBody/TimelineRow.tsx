@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { useQuery } from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { Text } from '_tosslib/components';
 import { colors } from '_tosslib/constants/colors';
 import { Room, Reservation } from 'pages/types';
@@ -14,10 +14,9 @@ interface TimelineRowProps {
 
 export function TimelineRow({ room, isFirst }: TimelineRowProps) {
   const date = useDateStore(state => state.date);
-  const { data: reservations = [] } = useQuery({
+  const { data: reservations } = useSuspenseQuery({
     queryKey: ['reservations', date],
     queryFn: () => getReservations(date),
-    enabled: !!date,
   });
   const roomReservations = reservations.filter(r => r.roomId === room.id);
 

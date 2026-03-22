@@ -1,10 +1,13 @@
-import { useQuery } from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { getMyReservations } from 'pages/remotes';
 import { MyReservationEmpty } from './MyReservationEmpty';
 import { MyReservationBody } from './MyReservationBody';
 
 export function MyReservationContent() {
-  const { data: myReservations = [] } = useQuery({ queryKey: ['myReservations'], queryFn: getMyReservations });
+  const { data: myReservations } = useSuspenseQuery({
+    queryKey: ['myReservations'],
+    queryFn: getMyReservations,
+  });
 
   if (myReservations.length === 0) {
     return <MyReservationEmpty />;
