@@ -1,11 +1,12 @@
 import { css } from '@emotion/react';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { getMyReservations } from 'pages/shared/remotes';
+import { myReservationKeys } from 'pages/shared/queryKeys';
 import { MyReservationCard } from './MyReservationCard';
 
 export function MyReservationBody() {
   const { data: myReservations } = useSuspenseQuery({
-    queryKey: ['myReservations'],
+    queryKey: myReservationKeys.all,
     queryFn: getMyReservations,
   });
 

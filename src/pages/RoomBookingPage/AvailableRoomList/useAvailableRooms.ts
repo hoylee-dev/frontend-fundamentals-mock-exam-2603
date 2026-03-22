@@ -1,6 +1,7 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { Room, Reservation, Equipment } from 'pages/shared/types';
 import { getReservations } from 'pages/shared/remotes';
+import { reservationKeys } from 'pages/shared/queryKeys';
 import { useRoomsSuspenseQuery } from 'pages/shared/useRoomsQuery';
 import { useBookingFilterStore } from '../useBookingFilterStore';
 
@@ -45,7 +46,7 @@ export function useAvailableRooms() {
   const { date, startTime, endTime, attendees, equipment, preferredFloor } = useBookingFilterStore();
   const { data: rooms } = useRoomsSuspenseQuery();
   const { data: reservations } = useSuspenseQuery({
-    queryKey: ['reservations', date],
+    queryKey: reservationKeys.byDate(date),
     queryFn: () => getReservations(date),
   });
 

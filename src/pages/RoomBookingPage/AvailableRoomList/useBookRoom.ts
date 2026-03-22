@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createReservation } from 'pages/shared/remotes';
+import { reservationKeys, myReservationKeys } from 'pages/shared/queryKeys';
 import axios from 'axios';
 import { useBookingFilterStore } from '../useBookingFilterStore';
 import { useBookingErrorStore } from '../useBookingErrorStore';
@@ -18,8 +19,8 @@ export function useBookRoom() {
       createReservation(data),
     {
       onSuccess: (_data, variables) => {
-        queryClient.invalidateQueries({ queryKey: ['reservations', variables.date] });
-        queryClient.invalidateQueries({ queryKey: ['myReservations'] });
+        queryClient.invalidateQueries({ queryKey: reservationKeys.byDate(variables.date) });
+        queryClient.invalidateQueries({ queryKey: myReservationKeys.all });
       },
     }
   );
