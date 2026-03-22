@@ -3,7 +3,7 @@ import { useAvailableRooms } from './useAvailableRooms';
 import { RoomCard } from './RoomCard';
 
 export function RoomCardList() {
-  const availableRooms = useAvailableRooms();
+  const { availableRooms } = useAvailableRooms();
 
   return (
     <div

@@ -4,7 +4,7 @@ import { colors } from '_tosslib/constants/colors';
 import { useAvailableRooms } from './useAvailableRooms';
 
 export function AvailableRoomHeader() {
-  const availableRooms = useAvailableRooms();
+  const { availableRooms } = useAvailableRooms();
 
   return (
     <div

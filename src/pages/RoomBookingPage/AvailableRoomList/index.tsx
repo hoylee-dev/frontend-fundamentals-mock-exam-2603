@@ -6,7 +6,7 @@ import { RoomCardList } from './RoomCardList';
 import { ConfirmButton } from './ConfirmButton';
 
 export function AvailableRoomList() {
-  const availableRooms = useAvailableRooms();
+  const { availableRooms } = useAvailableRooms();
 
   return (
     <div>

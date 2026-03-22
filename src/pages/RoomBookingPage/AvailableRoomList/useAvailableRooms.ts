@@ -49,7 +49,7 @@ export function useAvailableRooms() {
     queryFn: () => getReservations(date),
   });
 
-  return filterAndSortRooms(rooms, reservations, {
+  const availableRooms = filterAndSortRooms(rooms, reservations, {
     date,
     startTime,
     endTime,
@@ -57,4 +57,6 @@ export function useAvailableRooms() {
     equipment,
     preferredFloor,
   });
+
+  return { availableRooms };
 }
