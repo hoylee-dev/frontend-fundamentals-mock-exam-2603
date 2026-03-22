@@ -1,28 +1,14 @@
 import { css } from '@emotion/react';
-import { useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { Top, Spacing, Border, Button } from '_tosslib/components';
+import { Top, Spacing, Border } from '_tosslib/components';
 import { colors } from '_tosslib/constants/colors';
 import { sectionPadding } from 'pages/styles';
-import { MessageBanner } from 'pages/MessageBanner';
 import { DateSelector } from './DateSelector';
 import { Timeline } from './Timeline';
+import { StatusMessage } from './StatusMessage';
 import { MyReservationList } from './MyReservationList';
-import { useMessageStore } from './useMessageStore';
+import { BookingButton } from './BookingButton';
 
 export function ReservationStatusPage() {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const locationState = location.state as { message?: string } | null;
-  const { message, setMessage } = useMessageStore();
-
-  useEffect(() => {
-    if (locationState?.message) {
-      setMessage({ type: 'success', text: locationState.message });
-      window.history.replaceState({}, '');
-    }
-  }, [locationState, setMessage]);
-
   return (
     <div
       css={css`
@@ -57,12 +43,10 @@ export function ReservationStatusPage() {
       <Border size={8} />
       <Spacing size={24} />
 
-      {message && (
-        <div css={sectionPadding}>
-          <MessageBanner type={message.type} text={message.text} />
-          <Spacing size={12} />
-        </div>
-      )}
+      <div css={sectionPadding}>
+        <StatusMessage />
+        <Spacing size={12} />
+      </div>
 
       <div css={sectionPadding}>
         <MyReservationList />
@@ -73,9 +57,7 @@ export function ReservationStatusPage() {
       <Spacing size={24} />
 
       <div css={sectionPadding}>
-        <Button display="full" onClick={() => navigate('/booking')}>
-          예약하기
-        </Button>
+        <BookingButton />
       </div>
       <Spacing size={24} />
     </div>
