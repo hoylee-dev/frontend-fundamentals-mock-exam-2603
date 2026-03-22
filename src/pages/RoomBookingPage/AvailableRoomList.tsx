@@ -1,25 +1,16 @@
 import { css } from '@emotion/react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Spacing, Text, Button, ListRow } from '_tosslib/components';
 import { colors } from '_tosslib/constants/colors';
 import { EQUIPMENT_LABELS } from 'pages/constants';
-import { Room, Reservation } from 'pages/types';
-import { createReservation } from 'pages/remotes';
+import { Room, Reservation, Equipment } from 'pages/types';
+import { getReservations, createReservation } from 'pages/remotes';
+import { useRoomsQuery } from 'pages/useRoomsQuery';
 import axios from 'axios';
-
-interface AvailableRoomListProps {
-  rooms: Room[];
-  reservations: Reservation[];
-  date: string;
-  startTime: string;
-  endTime: string;
-  attendees: number;
-  equipment: string[];
-  preferredFloor: number | null;
-  onError: (message: string) => void;
-}
+import { useBookingFilterStore } from './useBookingFilterStore';
+import { useBookingErrorStore } from './useBookingErrorStore';
 
 function filterAndSortRooms(
   rooms: Room[],
@@ -36,7 +27,7 @@ function filterAndSortRooms(
     startTime: string;
     endTime: string;
     attendees: number;
-    equipment: string[];
+    equipment: Equipment[];
     preferredFloor: number | null;
   }
 ): Room[] {
@@ -58,20 +49,18 @@ function filterAndSortRooms(
     });
 }
 
-export function AvailableRoomList({
-  rooms,
-  reservations,
-  date,
-  startTime,
-  endTime,
-  attendees,
-  equipment,
-  preferredFloor,
-  onError,
-}: AvailableRoomListProps) {
+export function AvailableRoomList() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [selectedRoomId, setSelectedRoomId] = useState<string | null>(null);
+
+  const { date, startTime, endTime, attendees, equipment, preferredFloor } = useBookingFilterStore();
+  const setErrorMessage = useBookingErrorStore(state => state.setErrorMessage);
+  const { data: rooms = [] } = useRoomsQuery();
+  const { data: reservations = [] } = useQuery({
+    queryKey: ['reservations', date],
+    queryFn: () => getReservations(date),
+  });
 
   const createMutation = useMutation(
     (data: { roomId: string; date: string; start: string; end: string; attendees: number; equipment: string[] }) =>
@@ -95,7 +84,7 @@ export function AvailableRoomList({
 
   const handleBook = async () => {
     if (!selectedRoomId) {
-      onError('회의실을 선택해주세요.');
+      setErrorMessage('회의실을 선택해주세요.');
       return;
     }
 
@@ -115,7 +104,7 @@ export function AvailableRoomList({
       }
 
       const errResult = result as { message?: string };
-      onError(errResult.message ?? '예약에 실패했습니다.');
+      setErrorMessage(errResult.message ?? '예약에 실패했습니다.');
       setSelectedRoomId(null);
     } catch (err: unknown) {
       let serverMessage = '예약에 실패했습니다.';
@@ -123,7 +112,7 @@ export function AvailableRoomList({
         const data = err.response?.data as { message?: string } | undefined;
         serverMessage = data?.message ?? serverMessage;
       }
-      onError(serverMessage);
+      setErrorMessage(serverMessage);
       setSelectedRoomId(null);
     }
   };

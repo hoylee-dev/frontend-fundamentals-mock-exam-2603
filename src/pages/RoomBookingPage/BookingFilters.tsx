@@ -4,39 +4,30 @@ import { colors } from '_tosslib/constants/colors';
 import { TIME_SLOTS } from 'pages/constants';
 import { formatDate } from 'pages/utils';
 import { dateInputStyle } from 'pages/styles';
+import { useRoomsQuery } from 'pages/useRoomsQuery';
 import { EquipmentToggle } from './EquipmentToggle';
+import { Equipment } from 'pages/types';
+import { useBookingFilterStore } from './useBookingFilterStore';
+import { useBookingFilterSync } from './useBookingFilterSync';
+import { useBookingErrorStore } from './useBookingErrorStore';
 
-interface BookingFiltersProps {
-  date: string;
-  startTime: string;
-  endTime: string;
-  attendees: number;
-  equipment: string[];
-  preferredFloor: number | null;
-  floors: number[];
-  onDateChange: (date: string) => void;
-  onStartTimeChange: (time: string) => void;
-  onEndTimeChange: (time: string) => void;
-  onAttendeesChange: (count: number) => void;
-  onEquipmentChange: (equipment: string[]) => void;
-  onFloorChange: (floor: number | null) => void;
-}
+export function BookingFilters() {
+  useBookingFilterSync();
 
-export function BookingFilters({
-  date,
-  startTime,
-  endTime,
-  attendees,
-  equipment,
-  preferredFloor,
-  floors,
-  onDateChange,
-  onStartTimeChange,
-  onEndTimeChange,
-  onAttendeesChange,
-  onEquipmentChange,
-  onFloorChange,
-}: BookingFiltersProps) {
+  const {
+    date, setDate,
+    startTime, setStartTime,
+    endTime, setEndTime,
+    attendees, setAttendees,
+    equipment, setEquipment,
+    preferredFloor, setPreferredFloor,
+  } = useBookingFilterStore();
+  const setErrorMessage = useBookingErrorStore(state => state.setErrorMessage);
+  const { data: rooms = [] } = useRoomsQuery();
+  const floors = [...new Set(rooms.map(r => r.floor))].sort((a, b) => a - b);
+
+  const resetError = () => setErrorMessage(null);
+
   return (
     <div>
       <Text typography="t5" fontWeight="bold" color={colors.grey900}>
@@ -59,7 +50,7 @@ export function BookingFilters({
           type="date"
           value={date}
           min={formatDate(new Date())}
-          onChange={e => onDateChange(e.target.value)}
+          onChange={e => { setDate(e.target.value); resetError(); }}
           aria-label="날짜"
           css={dateInputStyle}
         />
@@ -84,7 +75,7 @@ export function BookingFilters({
           <Text as="label" typography="t7" fontWeight="medium" color={colors.grey600}>
             시작 시간
           </Text>
-          <Select value={startTime} onChange={e => onStartTimeChange(e.target.value)} aria-label="시작 시간">
+          <Select value={startTime} onChange={e => { setStartTime(e.target.value); resetError(); }} aria-label="시작 시간">
             <option value="">선택</option>
             {TIME_SLOTS.slice(0, -1).map(t => (
               <option key={t} value={t}>
@@ -104,7 +95,7 @@ export function BookingFilters({
           <Text as="label" typography="t7" fontWeight="medium" color={colors.grey600}>
             종료 시간
           </Text>
-          <Select value={endTime} onChange={e => onEndTimeChange(e.target.value)} aria-label="종료 시간">
+          <Select value={endTime} onChange={e => { setEndTime(e.target.value); resetError(); }} aria-label="종료 시간">
             <option value="">선택</option>
             {TIME_SLOTS.slice(1).map(t => (
               <option key={t} value={t}>
@@ -138,7 +129,7 @@ export function BookingFilters({
             type="number"
             min={1}
             value={attendees}
-            onChange={e => onAttendeesChange(Math.max(1, Number(e.target.value)))}
+            onChange={e => { setAttendees(Math.max(1, Number(e.target.value))); resetError(); }}
             aria-label="참석 인원"
             css={dateInputStyle}
           />
@@ -156,7 +147,7 @@ export function BookingFilters({
           </Text>
           <Select
             value={preferredFloor ?? ''}
-            onChange={e => onFloorChange(e.target.value === '' ? null : Number(e.target.value))}
+            onChange={e => { setPreferredFloor(e.target.value === '' ? null : Number(e.target.value)); resetError(); }}
             aria-label="선호 층"
           >
             <option value="">전체</option>
@@ -171,7 +162,10 @@ export function BookingFilters({
       <Spacing size={14} />
 
       {/* 장비 */}
-      <EquipmentToggle selected={equipment} onChange={onEquipmentChange} />
+      <EquipmentToggle
+        selected={equipment}
+        onChange={v => { setEquipment(v as Equipment[]); resetError(); }}
+      />
     </div>
   );
 }
