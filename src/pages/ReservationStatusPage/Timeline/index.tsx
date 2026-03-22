@@ -1,4 +1,5 @@
 import { Suspense } from 'react';
+import { ErrorBoundary } from 'react-error-boundary';
 import { css } from '@emotion/react';
 import { Spacing, Text } from '_tosslib/components';
 import { colors } from '_tosslib/constants/colors';
@@ -21,25 +22,46 @@ export function Timeline() {
         `}
       >
         <TimelineHeader />
-        <Suspense
-          fallback={
-            <div
-              css={css`
-                height: 280px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-              `}
-            >
-              <Text typography="t7" color={colors.grey400}>
-                로딩 중...
-              </Text>
-            </div>
-          }
-        >
-          <TimelineBody />
-        </Suspense>
+        <ErrorBoundary fallback={<TimelineBodyErrorFallback />}>
+          <Suspense fallback={<TimelineBodyFallback />}>
+            <TimelineBody />
+          </Suspense>
+        </ErrorBoundary>
       </div>
+    </div>
+  );
+}
+
+function TimelineBodyFallback() {
+  return (
+    <div
+      css={css`
+        height: 280px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      `}
+    >
+      <Text typography="t7" color={colors.grey400}>
+        로딩 중...
+      </Text>
+    </div>
+  );
+}
+
+function TimelineBodyErrorFallback() {
+  return (
+    <div
+      css={css`
+        height: 280px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      `}
+    >
+      <Text typography="t7" color={colors.grey400}>
+        데이터를 불러오지 못했습니다.
+      </Text>
     </div>
   );
 }

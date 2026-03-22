@@ -1,5 +1,6 @@
 import { css } from '@emotion/react';
 import { Suspense } from 'react';
+import { ErrorBoundary } from 'react-error-boundary';
 import { Top, Spacing, Border, Text } from '_tosslib/components';
 import { colors } from '_tosslib/constants/colors';
 import { sectionPadding } from 'pages/styles';
@@ -55,9 +56,11 @@ export function RoomBookingPage() {
 
       {isFilterComplete && (
         <div css={sectionPadding}>
-          <Suspense fallback={<AvailableRoomListFallback />}>
-            <AvailableRoomList />
-          </Suspense>
+          <ErrorBoundary fallback={<AvailableRoomListErrorFallback />}>
+            <Suspense fallback={<AvailableRoomListFallback />}>
+              <AvailableRoomList />
+            </Suspense>
+          </ErrorBoundary>
 
           <Spacing size={16} />
 
@@ -82,6 +85,23 @@ function AvailableRoomListFallback() {
     >
       <Text typography="t7" color={colors.grey400}>
         로딩 중...
+      </Text>
+    </div>
+  );
+}
+
+function AvailableRoomListErrorFallback() {
+  return (
+    <div
+      css={css`
+        height: 200px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      `}
+    >
+      <Text typography="t7" color={colors.grey400}>
+        회의실 목록을 불러오지 못했습니다.
       </Text>
     </div>
   );
