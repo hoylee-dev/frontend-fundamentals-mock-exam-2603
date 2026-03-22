@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { useBookingFilterStore } from './useBookingFilterStore';
+import { useBookingFilterStore } from '../useBookingFilterStore';
 
 export function useBookingFilterSync() {
   const [, setSearchParams] = useSearchParams();

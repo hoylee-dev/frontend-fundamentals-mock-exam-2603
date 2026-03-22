@@ -7,7 +7,7 @@ import { BookingErrorMessage } from './BookingErrorMessage';
 import { BookingFilters } from './BookingFilters';
 import { ValidationError } from './ValidationError';
 import { AvailableRoomList } from './AvailableRoomList';
-import { useValidation } from './ValidationError';
+import { useValidation } from './useValidation';
 
 export function RoomBookingPage() {
   const { isFilterComplete } = useValidation();
@@ -35,7 +35,10 @@ export function RoomBookingPage() {
         예약하기
       </Top.Top03>
 
-      <BookingErrorMessage />
+      <div css={sectionPadding}>
+        <Spacing size={12} />
+        <BookingErrorMessage />
+      </div>
 
       <Spacing size={24} />
 

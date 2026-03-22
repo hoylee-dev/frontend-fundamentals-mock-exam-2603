@@ -10,10 +10,5 @@ export function BookingErrorMessage() {
     return null;
   }
 
-  return (
-    <div css={sectionPadding}>
-      <Spacing size={12} />
-      <MessageBanner type="error" text={errorMessage} />
-    </div>
-  );
+  return <MessageBanner type="error" text={errorMessage} />;
 }

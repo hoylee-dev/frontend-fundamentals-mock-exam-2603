@@ -2,16 +2,18 @@ import { css } from '@emotion/react';
 import { Spacing, Text } from '_tosslib/components';
 import { colors } from '_tosslib/constants/colors';
 import { EQUIPMENT_LABELS, ALL_EQUIPMENT } from 'pages/constants';
+import { Equipment } from 'pages/types';
+import { useBookingFilterStore } from '../useBookingFilterStore';
+import { useBookingErrorStore } from '../useBookingErrorStore';
 
-interface EquipmentToggleProps {
-  selected: string[];
-  onChange: (equipment: string[]) => void;
-}
+export function EquipmentToggle() {
+  const { equipment, setEquipment } = useBookingFilterStore();
+  const { setErrorMessage } = useBookingErrorStore();
 
-export function EquipmentToggle({ selected, onChange }: EquipmentToggleProps) {
-  const toggleEquipment = (eq: string) => {
-    const isSelected = selected.includes(eq);
-    onChange(isSelected ? selected.filter(e => e !== eq) : [...selected, eq]);
+  const toggleEquipment = (eq: Equipment) => {
+    const isSelected = equipment.includes(eq);
+    setEquipment(isSelected ? equipment.filter(e => e !== eq) : [...equipment, eq]);
+    setErrorMessage(null);
   };
 
   return (
@@ -28,7 +30,7 @@ export function EquipmentToggle({ selected, onChange }: EquipmentToggleProps) {
         `}
       >
         {ALL_EQUIPMENT.map(eq => {
-          const isSelected = selected.includes(eq);
+          const isSelected = equipment.includes(eq);
           return (
             <button
               key={eq}
