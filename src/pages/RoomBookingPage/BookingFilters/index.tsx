@@ -1,4 +1,5 @@
 import { css } from '@emotion/react';
+import { Suspense } from 'react';
 import { Spacing, Text } from '_tosslib/components';
 import { colors } from '_tosslib/constants/colors';
 import { useBookingFilterSync } from './useBookingFilterSync';
@@ -43,12 +44,27 @@ export function BookingFilters() {
         `}
       >
         <AttendeeInput />
-        <FloorSelect />
+        <Suspense fallback={<FloorSelectFallback />}>
+          <FloorSelect />
+        </Suspense>
       </div>
 
       <Spacing size={14} />
 
       <EquipmentToggle />
     </div>
+  );
+}
+
+function FloorSelectFallback() {
+  return (
+    <div
+      css={css`
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        flex: 1;
+      `}
+    />
   );
 }

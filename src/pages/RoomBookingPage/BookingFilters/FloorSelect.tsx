@@ -1,14 +1,14 @@
 import { css } from '@emotion/react';
 import { Text, Select } from '_tosslib/components';
 import { colors } from '_tosslib/constants/colors';
-import { useRoomsQuery } from 'pages/useRoomsQuery';
+import { useRoomsSuspenseQuery } from 'pages/useRoomsQuery';
 import { useBookingFilterStore } from '../useBookingFilterStore';
 import { useBookingErrorStore } from '../useBookingErrorStore';
 
 export function FloorSelect() {
   const { preferredFloor, setPreferredFloor } = useBookingFilterStore();
   const { setErrorMessage } = useBookingErrorStore();
-  const { data: rooms = [] } = useRoomsQuery();
+  const { data: rooms } = useRoomsSuspenseQuery();
   const floors = [...new Set(rooms.map(r => r.floor))].sort((a, b) => a - b);
 
   return (

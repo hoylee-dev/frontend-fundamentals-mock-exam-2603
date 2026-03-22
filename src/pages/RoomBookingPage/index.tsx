@@ -1,12 +1,13 @@
 import { css } from '@emotion/react';
-import { Top, Spacing, Border } from '_tosslib/components';
+import { Suspense } from 'react';
+import { Top, Spacing, Border, Text } from '_tosslib/components';
 import { colors } from '_tosslib/constants/colors';
 import { sectionPadding } from 'pages/styles';
 import { BackButton } from './BackButton';
 import { BookingErrorMessage } from './BookingErrorMessage';
 import { BookingFilters } from './BookingFilters';
 import { ValidationError } from './ValidationError';
-import { AvailableRoomList } from './AvailableRoomList';
+import { AvailableRoomList, ConfirmButton } from './AvailableRoomList';
 import { useValidation } from './useValidation';
 
 export function RoomBookingPage() {
@@ -54,11 +55,34 @@ export function RoomBookingPage() {
 
       {isFilterComplete && (
         <div css={sectionPadding}>
-          <AvailableRoomList />
+          <Suspense fallback={<AvailableRoomListFallback />}>
+            <AvailableRoomList />
+          </Suspense>
+
+          <Spacing size={16} />
+
+          <ConfirmButton />
         </div>
       )}
 
       <Spacing size={24} />
+    </div>
+  );
+}
+
+function AvailableRoomListFallback() {
+  return (
+    <div
+      css={css`
+        height: 200px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      `}
+    >
+      <Text typography="t7" color={colors.grey400}>
+        로딩 중...
+      </Text>
     </div>
   );
 }
