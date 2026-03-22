@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Top, Spacing, Border, Button } from '_tosslib/components';
 import { colors } from '_tosslib/constants/colors';
@@ -8,20 +8,20 @@ import { MessageBanner } from 'pages/MessageBanner';
 import { DateSelector } from './DateSelector';
 import { Timeline } from './Timeline';
 import { MyReservationList } from './MyReservationList';
+import { useMessageStore } from './useMessageStore';
 
 export function ReservationStatusPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const locationState = location.state as { message?: string } | null;
-  const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(
-    locationState?.message ? { type: 'success', text: locationState.message } : null
-  );
+  const { message, setMessage } = useMessageStore();
 
   useEffect(() => {
     if (locationState?.message) {
+      setMessage({ type: 'success', text: locationState.message });
       window.history.replaceState({}, '');
     }
-  }, [locationState]);
+  }, [locationState, setMessage]);
 
   return (
     <div
@@ -65,7 +65,7 @@ export function ReservationStatusPage() {
       )}
 
       <div css={sectionPadding}>
-        <MyReservationList onMessage={setMessage} />
+        <MyReservationList />
       </div>
 
       <Spacing size={24} />
