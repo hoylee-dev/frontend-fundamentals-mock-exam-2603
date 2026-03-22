@@ -6,6 +6,9 @@ export function getRooms() {
 }
 
 export function getReservations(date: string) {
+  if (!date) {
+    return Promise.resolve([] as Reservation[]);
+  }
   return http.get<Reservation[]>(`/api/reservations?date=${date}`);
 }
 

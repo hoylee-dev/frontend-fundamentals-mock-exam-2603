@@ -17,15 +17,13 @@ interface BookingFilterStore {
   setPreferredFloor: (floor: number | null) => void;
 }
 
-const params = new URLSearchParams(window.location.search);
-
 export const useBookingFilterStore = create<BookingFilterStore>(set => ({
-  date: params.get('date') || formatDate(new Date()),
-  startTime: params.get('startTime') || '',
-  endTime: params.get('endTime') || '',
-  attendees: Number(params.get('attendees')) || 1,
-  equipment: params.get('equipment') ? params.get('equipment')!.split(',').filter(Boolean) as Equipment[] : [],
-  preferredFloor: params.get('floor') ? Number(params.get('floor')) : null,
+  date: formatDate(new Date()),
+  startTime: '',
+  endTime: '',
+  attendees: 1,
+  equipment: [],
+  preferredFloor: null,
   setDate: (date: string) => set({ date }),
   setStartTime: (startTime: string) => set({ startTime }),
   setEndTime: (endTime: string) => set({ endTime }),
