@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { Equipment } from 'pages/types';
+import { Equipment } from 'pages/shared/types';
 import { useBookingFilterStore } from '../useBookingFilterStore';
 
 export function useBookingFilterSync() {

@@ -1,5 +1,5 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { getMyReservations } from 'pages/remotes';
+import { getMyReservations } from 'pages/shared/remotes';
 import { MyReservationEmpty } from './MyReservationEmpty';
 import { MyReservationBody } from './MyReservationBody';
 

@@ -1,7 +1,7 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { Room, Reservation, Equipment } from 'pages/types';
-import { getReservations } from 'pages/remotes';
-import { useRoomsSuspenseQuery } from 'pages/useRoomsQuery';
+import { Room, Reservation, Equipment } from 'pages/shared/types';
+import { getReservations } from 'pages/shared/remotes';
+import { useRoomsSuspenseQuery } from 'pages/shared/useRoomsQuery';
 import { useBookingFilterStore } from '../useBookingFilterStore';
 
 function filterAndSortRooms(

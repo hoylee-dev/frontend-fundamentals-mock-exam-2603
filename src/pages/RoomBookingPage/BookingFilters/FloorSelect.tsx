@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { Text, Select } from '_tosslib/components';
 import { colors } from '_tosslib/constants/colors';
-import { useRoomsSuspenseQuery } from 'pages/useRoomsQuery';
+import { useRoomsSuspenseQuery } from 'pages/shared/useRoomsQuery';
 import { useBookingFilterStore } from '../useBookingFilterStore';
 import { useBookingErrorStore } from '../useBookingErrorStore';
 

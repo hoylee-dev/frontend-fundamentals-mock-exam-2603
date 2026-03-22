@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { MessageBanner } from 'pages/MessageBanner';
+import { MessageBanner } from 'pages/shared/MessageBanner';
 import { useMessageStore } from './useMessageStore';
 
 export function StatusMessage() {

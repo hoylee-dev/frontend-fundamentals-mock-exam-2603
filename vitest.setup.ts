@@ -2,7 +2,7 @@ import '@testing-library/jest-dom/vitest';
 import { server } from './src/_tosslib/server/node';
 import { resetData } from './src/_tosslib/server/handlers';
 import { beforeAll, afterAll, afterEach } from 'vitest';
-import { formatDate } from './src/pages/utils';
+import { formatDate } from './src/pages/shared/utils';
 import { useBookingFilterStore } from './src/pages/RoomBookingPage/useBookingFilterStore';
 import { useBookingErrorStore } from './src/pages/RoomBookingPage/useBookingErrorStore';
 import { useSelectedRoomStore } from './src/pages/RoomBookingPage/AvailableRoomList/useSelectedRoomStore';

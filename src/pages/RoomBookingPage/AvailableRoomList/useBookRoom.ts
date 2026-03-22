@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { createReservation } from 'pages/remotes';
+import { createReservation } from 'pages/shared/remotes';
 import axios from 'axios';
 import { useBookingFilterStore } from '../useBookingFilterStore';
 import { useBookingErrorStore } from '../useBookingErrorStore';

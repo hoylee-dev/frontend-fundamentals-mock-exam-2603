@@ -3,7 +3,7 @@ import { Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { Top, Spacing, Border, Text } from '_tosslib/components';
 import { colors } from '_tosslib/constants/colors';
-import { sectionPadding } from 'pages/styles';
+import { sectionPadding } from 'pages/shared/styles';
 import { BackButton } from './BackButton';
 import { BookingErrorMessage } from './BookingErrorMessage';
 import { BookingFilters } from './BookingFilters';

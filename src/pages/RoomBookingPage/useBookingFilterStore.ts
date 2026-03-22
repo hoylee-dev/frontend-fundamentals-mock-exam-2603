@@ -1,6 +1,6 @@
 import { create } from 'zustand';
-import { formatDate } from 'pages/utils';
-import { Equipment } from 'pages/types';
+import { formatDate } from 'pages/shared/utils';
+import { Equipment } from 'pages/shared/types';
 
 interface BookingFilterStore {
   date: string;

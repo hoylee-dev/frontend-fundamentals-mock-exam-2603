@@ -1,9 +1,9 @@
 import { css } from '@emotion/react';
 import { Button, ListRow } from '_tosslib/components';
 import { colors } from '_tosslib/constants/colors';
-import { EQUIPMENT_LABELS } from 'pages/constants';
-import { Reservation } from 'pages/types';
-import { useRoomsSuspenseQuery } from 'pages/useRoomsQuery';
+import { EQUIPMENT_LABELS } from 'pages/shared/constants';
+import { Reservation } from 'pages/shared/types';
+import { useRoomsSuspenseQuery } from 'pages/shared/useRoomsQuery';
 import { useCancelReservation } from './useCancelReservation';
 
 interface MyReservationCardProps {

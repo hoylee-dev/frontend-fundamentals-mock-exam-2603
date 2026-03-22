@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { Text } from '_tosslib/components';
 import { colors } from '_tosslib/constants/colors';
-import { dateInputStyle } from 'pages/styles';
+import { dateInputStyle } from 'pages/shared/styles';
 import { useBookingFilterStore } from '../useBookingFilterStore';
 import { useBookingErrorStore } from '../useBookingErrorStore';
 

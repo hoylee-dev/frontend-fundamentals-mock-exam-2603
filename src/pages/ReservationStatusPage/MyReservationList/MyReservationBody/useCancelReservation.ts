@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { cancelReservation } from 'pages/remotes';
+import { cancelReservation } from 'pages/shared/remotes';
 import { useMessageStore } from '../../useMessageStore';
 
 export function useCancelReservation() {

@@ -1,4 +1,4 @@
-import { useRoomsSuspenseQuery } from 'pages/useRoomsQuery';
+import { useRoomsSuspenseQuery } from 'pages/shared/useRoomsQuery';
 import { TimelineRow } from './TimelineRow';
 
 export function TimelineBody() {

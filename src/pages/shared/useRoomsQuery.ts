@@ -1,5 +1,5 @@
 import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
-import { getRooms } from 'pages/remotes';
+import { getRooms } from './remotes';
 
 export function useRoomsQuery() {
   return useQuery({ queryKey: ['rooms'], queryFn: getRooms });

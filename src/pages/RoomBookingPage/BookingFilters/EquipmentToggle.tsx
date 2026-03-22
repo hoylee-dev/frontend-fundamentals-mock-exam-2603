@@ -1,8 +1,8 @@
 import { css } from '@emotion/react';
 import { Spacing, Text } from '_tosslib/components';
 import { colors } from '_tosslib/constants/colors';
-import { EQUIPMENT_LABELS } from 'pages/constants';
-import { Equipment } from 'pages/types';
+import { EQUIPMENT_LABELS } from 'pages/shared/constants';
+import { Equipment } from 'pages/shared/types';
 import { useBookingFilterStore } from '../useBookingFilterStore';
 import { useBookingErrorStore } from '../useBookingErrorStore';
 

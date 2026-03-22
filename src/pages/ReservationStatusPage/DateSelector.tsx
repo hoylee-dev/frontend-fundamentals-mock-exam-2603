@@ -1,7 +1,7 @@
 import { Spacing, Text } from '_tosslib/components';
 import { colors } from '_tosslib/constants/colors';
-import { formatDate } from 'pages/utils';
-import { dateInputStyle } from 'pages/styles';
+import { formatDate } from 'pages/shared/utils';
+import { dateInputStyle } from 'pages/shared/styles';
 import { useDateStore } from './useDateStore';
 
 export function DateSelector() {

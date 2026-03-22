@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { Text, Select } from '_tosslib/components';
 import { colors } from '_tosslib/constants/colors';
-import { TIME_SLOTS } from 'pages/constants';
+import { TIME_SLOTS } from 'pages/shared/constants';
 import { useBookingFilterStore } from '../useBookingFilterStore';
 import { useBookingErrorStore } from '../useBookingErrorStore';
 

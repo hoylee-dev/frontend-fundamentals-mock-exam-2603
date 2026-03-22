@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import { colors } from '_tosslib/constants/colors';
-import { Reservation } from 'pages/types';
+import { Reservation } from 'pages/shared/types';
 import { TOTAL_MINUTES, timeToMinutes } from '../../timelineUtils';
 import { ReservationTooltip } from './ReservationTooltip';
 import { useActiveReservation } from './useActiveReservationStore';

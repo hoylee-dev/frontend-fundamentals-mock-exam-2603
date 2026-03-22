@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { Spacing } from '_tosslib/components';
 import { colors } from '_tosslib/constants/colors';
-import { sectionPadding } from 'pages/styles';
+import { sectionPadding } from 'pages/shared/styles';
 import { useValidation } from './useValidation';
 
 export function ValidationError() {

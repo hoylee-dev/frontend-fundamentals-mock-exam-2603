@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { formatDate } from 'pages/utils';
+import { formatDate } from 'pages/shared/utils';
 
 interface DateStore {
   date: string;

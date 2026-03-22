@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { colors } from '_tosslib/constants/colors';
-import { EQUIPMENT_LABELS } from 'pages/constants';
-import { Equipment } from 'pages/types';
+import { EQUIPMENT_LABELS } from 'pages/shared/constants';
+import { Equipment } from 'pages/shared/types';
 
 interface ReservationTooltipProps {
   start: string;

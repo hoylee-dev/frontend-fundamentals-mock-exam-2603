@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { getMyReservations } from 'pages/remotes';
+import { getMyReservations } from 'pages/shared/remotes';
 import { MyReservationCard } from './MyReservationCard';
 
 export function MyReservationBody() {
