@@ -1,5 +1,3 @@
-import { Spacing } from '_tosslib/components';
-import { sectionPadding } from 'pages/shared/styles';
 import { MessageBanner } from 'pages/shared/MessageBanner';
 import { useBookingErrorStore } from './useBookingErrorStore';
 

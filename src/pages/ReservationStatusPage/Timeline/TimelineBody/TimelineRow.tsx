@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { Text } from '_tosslib/components';
 import { colors } from '_tosslib/constants/colors';
-import { Room, Reservation } from 'pages/shared/types';
+import { Room } from 'pages/shared/types';
 import { getReservations } from 'pages/shared/remotes';
 import { reservationKeys } from 'pages/shared/queryKeys';
 import { useDateStore } from '../../useDateStore';
