@@ -14,7 +14,9 @@ interface TimelineRowProps {
 
 export function TimelineRow({ room, isFirst }: TimelineRowProps) {
   const date = useDateStore(state => state.date);
-  const { data: reservations = [] } = useQuery<Reservation[]>(['reservations', date], () => getReservations(date), {
+  const { data: reservations = [] } = useQuery({
+    queryKey: ['reservations', date],
+    queryFn: () => getReservations(date),
     enabled: !!date,
   });
   const roomReservations = reservations.filter(r => r.roomId === room.id);

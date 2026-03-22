@@ -17,12 +17,12 @@ export function RoomBookingPage() {
   const filters = useBookingFilters();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const { data: rooms = [] } = useQuery<Room[]>(['rooms'], getRooms);
-  const { data: reservations = [] } = useQuery<Reservation[]>(
-    ['reservations', filters.date],
-    () => getReservations(filters.date),
-    { enabled: !!filters.date }
-  );
+  const { data: rooms = [] } = useQuery({ queryKey: ['rooms'], queryFn: getRooms });
+  const { data: reservations = [] } = useQuery({
+    queryKey: ['reservations', filters.date],
+    queryFn: () => getReservations(filters.date),
+    enabled: !!filters.date,
+  });
 
   const floors = [...new Set(rooms.map(r => r.floor))].sort((a, b) => a - b);
 

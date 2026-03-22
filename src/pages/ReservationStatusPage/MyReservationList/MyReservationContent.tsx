@@ -4,7 +4,7 @@ import { MyReservationEmpty } from './MyReservationEmpty';
 import { MyReservationBody } from './MyReservationBody';
 
 export function MyReservationContent() {
-  const { data: myReservations = [] } = useQuery(['myReservations'], getMyReservations);
+  const { data: myReservations = [] } = useQuery({ queryKey: ['myReservations'], queryFn: getMyReservations });
 
   if (myReservations.length === 0) {
     return <MyReservationEmpty />;

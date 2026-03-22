@@ -5,7 +5,7 @@ import { colors } from '_tosslib/constants/colors';
 import { getMyReservations } from 'pages/remotes';
 
 export function MyReservationHeader() {
-  const { data: myReservations = [] } = useQuery(['myReservations'], getMyReservations);
+  const { data: myReservations = [] } = useQuery({ queryKey: ['myReservations'], queryFn: getMyReservations });
 
   return (
     <div

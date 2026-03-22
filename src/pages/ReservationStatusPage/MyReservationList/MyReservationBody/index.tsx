@@ -4,7 +4,7 @@ import { getMyReservations } from 'pages/remotes';
 import { MyReservationCard } from './MyReservationCard';
 
 export function MyReservationBody() {
-  const { data: myReservations = [] } = useQuery(['myReservations'], getMyReservations);
+  const { data: myReservations = [] } = useQuery({ queryKey: ['myReservations'], queryFn: getMyReservations });
 
   return (
     <div
