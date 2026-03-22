@@ -8,8 +8,8 @@ export function useCancelReservation() {
 
   const cancelMutation = useMutation((id: string) => cancelReservation(id), {
     onSuccess: () => {
-      queryClient.invalidateQueries(['reservations']);
-      queryClient.invalidateQueries(['myReservations']);
+      queryClient.invalidateQueries({ queryKey: ['reservations'] });
+      queryClient.invalidateQueries({ queryKey: ['myReservations'] });
     },
   });
 

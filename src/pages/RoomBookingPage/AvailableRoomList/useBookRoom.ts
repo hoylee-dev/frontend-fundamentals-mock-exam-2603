@@ -18,8 +18,8 @@ export function useBookRoom() {
       createReservation(data),
     {
       onSuccess: (_data, variables) => {
-        queryClient.invalidateQueries(['reservations', variables.date]);
-        queryClient.invalidateQueries(['myReservations']);
+        queryClient.invalidateQueries({ queryKey: ['reservations', variables.date] });
+        queryClient.invalidateQueries({ queryKey: ['myReservations'] });
       },
     }
   );
