@@ -59,5 +59,5 @@ export function useBookRoom() {
     }
   };
 
-  return { handleBook, isLoading: createMutation.isLoading };
+  return { handleBook, isLoading: createMutation.isPending };
 }

@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { useAvailableRooms } from './useAvailableRooms';
+import { useAvailableRooms } from '../useAvailableRooms';
 import { RoomCard } from './RoomCard';
 
 export function RoomCardList() {

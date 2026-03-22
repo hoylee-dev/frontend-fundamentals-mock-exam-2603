@@ -1,7 +1,12 @@
 import { css } from '@emotion/react';
 import { Text } from '_tosslib/components';
 import { colors } from '_tosslib/constants/colors';
-import { TOTAL_MINUTES, HOUR_LABELS, timeToMinutes } from '../timelineUtils';
+import { TIMELINE_START, TIMELINE_END, TOTAL_MINUTES, timeToMinutes } from './timelineUtils';
+
+const HOUR_LABELS = Array.from(
+  { length: TIMELINE_END - TIMELINE_START + 1 },
+  (_, i) => `${String(TIMELINE_START + i).padStart(2, '0')}:00`
+);
 
 export function TimelineHeader() {
   return (

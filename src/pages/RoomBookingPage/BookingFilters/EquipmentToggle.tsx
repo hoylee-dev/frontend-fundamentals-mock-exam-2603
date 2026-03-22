@@ -1,10 +1,12 @@
 import { css } from '@emotion/react';
 import { Spacing, Text } from '_tosslib/components';
 import { colors } from '_tosslib/constants/colors';
-import { EQUIPMENT_LABELS, ALL_EQUIPMENT } from 'pages/constants';
+import { EQUIPMENT_LABELS } from 'pages/constants';
 import { Equipment } from 'pages/types';
 import { useBookingFilterStore } from '../useBookingFilterStore';
 import { useBookingErrorStore } from '../useBookingErrorStore';
+
+const ALL_EQUIPMENT = Object.keys(EQUIPMENT_LABELS) as Equipment[];
 
 export function EquipmentToggle() {
   const { equipment, setEquipment } = useBookingFilterStore();

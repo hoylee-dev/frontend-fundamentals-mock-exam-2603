@@ -1,12 +1,13 @@
 import { css } from '@emotion/react';
 import { colors } from '_tosslib/constants/colors';
 import { EQUIPMENT_LABELS } from 'pages/constants';
+import { Equipment } from 'pages/types';
 
 interface ReservationTooltipProps {
   start: string;
   end: string;
   attendees: number;
-  equipment: string[];
+  equipment: Equipment[];
 }
 
 export function ReservationTooltip({ start, end, attendees, equipment }: ReservationTooltipProps) {

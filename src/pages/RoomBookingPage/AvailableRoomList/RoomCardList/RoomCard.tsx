@@ -3,7 +3,7 @@ import { Text, ListRow } from '_tosslib/components';
 import { colors } from '_tosslib/constants/colors';
 import { EQUIPMENT_LABELS } from 'pages/constants';
 import { Room } from 'pages/types';
-import { useSelectedRoomStore } from './useSelectedRoomStore';
+import { useSelectedRoomStore } from '../useSelectedRoomStore';
 
 interface RoomCardProps {
   room: Room;
