@@ -42,7 +42,7 @@ export function RoomBookingPage() {
           padding: 12px 24px 0;
         `}
       >
-        <BackButton />
+        <BackButton label="뒤로가기">← 예약 현황으로</BackButton>
       </div>
       <Top.Top03
         css={css`

@@ -2,14 +2,19 @@ import { css } from '@emotion/react';
 import { useNavigate } from 'react-router-dom';
 import { colors } from '_tosslib/constants/colors';
 
-export function BackButton() {
+interface BackButtonProps {
+  label: string;
+  children: string;
+}
+
+export function BackButton({ label, children }: BackButtonProps) {
   const navigate = useNavigate();
 
   return (
     <button
       type="button"
       onClick={() => navigate('/')}
-      aria-label="뒤로가기"
+      aria-label={label}
       css={css`
         background: none;
         border: none;
@@ -22,7 +27,7 @@ export function BackButton() {
         }
       `}
     >
-      ← 예약 현황으로
+      {children}
     </button>
   );
 }
