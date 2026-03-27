@@ -3,14 +3,31 @@ import { Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { Spacing, Text } from '_tosslib/components';
 import { colors } from '_tosslib/constants/colors';
+import { formatDate } from 'pages/shared/utils';
+import { TIME_SLOTS, EQUIPMENT_LABELS } from 'pages/shared/constants';
+import { Equipment } from 'pages/shared/types';
+import {
+  useDateParam,
+  useStartTimeParam,
+  useEndTimeParam,
+  useAttendeesParam,
+  useEquipmentParam,
+  usePreferredFloorParam,
+} from '../useFilterParams';
+import { useRoomsSuspenseQuery } from 'pages/shared/useRoomsQuery';
 import { DateFilter } from './DateFilter';
-import { StartTimeSelect } from './StartTimeSelect';
-import { EndTimeSelect } from './EndTimeSelect';
+import { TimeSelect } from './TimeSelect';
 import { AttendeeInput } from './AttendeeInput';
 import { FloorSelect } from './FloorSelect';
-import { EquipmentToggle } from './EquipmentToggle';
+import { ToggleButtonGroup } from './ToggleButtonGroup';
 
 export function BookingFilters() {
+  const [date, setDate] = useDateParam();
+  const [startTime, setStartTime] = useStartTimeParam();
+  const [endTime, setEndTime] = useEndTimeParam();
+  const [attendees, setAttendees] = useAttendeesParam();
+  const [equipment, setEquipment] = useEquipmentParam();
+
   return (
     <div>
       <Text typography="t5" fontWeight="bold" color={colors.grey900}>
@@ -19,7 +36,7 @@ export function BookingFilters() {
 
       <Spacing size={16} />
 
-      <DateFilter />
+      <DateFilter label="날짜" value={date} min={formatDate(new Date())} onChange={setDate} />
 
       <Spacing size={14} />
 
@@ -29,8 +46,8 @@ export function BookingFilters() {
           gap: 12px;
         `}
       >
-        <StartTimeSelect />
-        <EndTimeSelect />
+        <TimeSelect label="시작 시간" value={startTime} options={TIME_SLOTS.slice(0, -1)} onChange={setStartTime} />
+        <TimeSelect label="종료 시간" value={endTime} options={TIME_SLOTS.slice(1)} onChange={setEndTime} />
       </div>
 
       <Spacing size={14} />
@@ -41,19 +58,36 @@ export function BookingFilters() {
           gap: 12px;
         `}
       >
-        <AttendeeInput />
+        <AttendeeInput label="참석 인원" value={attendees} min={1} onChange={setAttendees} />
         <ErrorBoundary fallback={<FloorSelectErrorFallback />}>
           <Suspense fallback={<FloorSelectFallback />}>
-            <FloorSelect />
+            {/* todo: react 18 버전 업 & suspensive 적용 */}
+            <FloorSelectWithData />
           </Suspense>
         </ErrorBoundary>
       </div>
 
       <Spacing size={14} />
 
-      <EquipmentToggle />
+      <ToggleButtonGroup
+        label="필요 장비"
+        options={(Object.keys(EQUIPMENT_LABELS) as Equipment[]).map(key => ({
+          value: key,
+          label: EQUIPMENT_LABELS[key],
+        }))}
+        selected={equipment}
+        onChange={setEquipment}
+      />
     </div>
   );
+}
+
+function FloorSelectWithData() {
+  const { data: rooms } = useRoomsSuspenseQuery();
+  const floors = [...new Set(rooms.map(r => r.floor))].sort((a, b) => a - b);
+  const [preferredFloor, setPreferredFloor] = usePreferredFloorParam();
+
+  return <FloorSelect label="선호 층" value={preferredFloor} options={floors} onChange={setPreferredFloor} />;
 }
 
 function FloorSelectFallback() {

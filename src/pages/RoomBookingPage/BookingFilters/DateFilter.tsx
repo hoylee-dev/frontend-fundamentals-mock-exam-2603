@@ -1,13 +1,16 @@
 import { css } from '@emotion/react';
 import { Text } from '_tosslib/components';
 import { colors } from '_tosslib/constants/colors';
-import { formatDate } from 'pages/shared/utils';
 import { dateInputStyle } from 'pages/shared/styles';
-import { useDateParam } from '../useFilterParams';
 
-export function DateFilter() {
-  const [date, setDate] = useDateParam();
+interface DateFilterProps {
+  label: string;
+  value: string;
+  min: string;
+  onChange: (value: string) => void;
+}
 
+export function DateFilter({ label, value, min, onChange }: DateFilterProps) {
   return (
     <div
       css={css`
@@ -17,16 +20,9 @@ export function DateFilter() {
       `}
     >
       <Text as="label" typography="t7" fontWeight="medium" color={colors.grey600}>
-        날짜
+        {label}
       </Text>
-      <input
-        type="date"
-        value={date}
-        min={formatDate(new Date())}
-        onChange={e => setDate(e.target.value)}
-        aria-label="날짜"
-        css={dateInputStyle}
-      />
+      <input type="date" value={value} min={min} onChange={e => onChange(e.target.value)} aria-label={label} css={dateInputStyle} />
     </div>
   );
 }

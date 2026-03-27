@@ -1,24 +1,29 @@
 import { css } from '@emotion/react';
 import { Spacing, Text } from '_tosslib/components';
 import { colors } from '_tosslib/constants/colors';
-import { EQUIPMENT_LABELS } from 'pages/shared/constants';
-import { Equipment } from 'pages/shared/types';
-import { useEquipmentParam } from '../useFilterParams';
 
-const ALL_EQUIPMENT = Object.keys(EQUIPMENT_LABELS) as Equipment[];
+interface ToggleOption<T extends string> {
+  value: T;
+  label: string;
+}
 
-export function EquipmentToggle() {
-  const [equipment, setEquipment] = useEquipmentParam();
+interface ToggleButtonGroupProps<T extends string> {
+  label: string;
+  options: ToggleOption<T>[];
+  selected: T[];
+  onChange: (selected: T[]) => void;
+}
 
-  const toggleEquipment = (eq: Equipment) => {
-    const isSelected = equipment.includes(eq);
-    setEquipment(isSelected ? equipment.filter(e => e !== eq) : [...equipment, eq]);
+export function ToggleButtonGroup<T extends string>({ label, options, selected, onChange }: ToggleButtonGroupProps<T>) {
+  const toggle = (value: T) => {
+    const isSelected = selected.includes(value);
+    onChange(isSelected ? selected.filter(v => v !== value) : [...selected, value]);
   };
 
   return (
     <div>
       <Text as="label" typography="t7" fontWeight="medium" color={colors.grey600}>
-        필요 장비
+        {label}
       </Text>
       <Spacing size={8} />
       <div
@@ -28,14 +33,14 @@ export function EquipmentToggle() {
           flex-wrap: wrap;
         `}
       >
-        {ALL_EQUIPMENT.map(eq => {
-          const isSelected = equipment.includes(eq);
+        {options.map(({ value, label: optionLabel }) => {
+          const isSelected = selected.includes(value);
           return (
             <button
-              key={eq}
+              key={value}
               type="button"
-              onClick={() => toggleEquipment(eq)}
-              aria-label={EQUIPMENT_LABELS[eq]}
+              onClick={() => toggle(value)}
+              aria-label={optionLabel}
               aria-pressed={isSelected}
               css={css`
                 padding: 8px 16px;
@@ -52,7 +57,7 @@ export function EquipmentToggle() {
                 }
               `}
             >
-              {EQUIPMENT_LABELS[eq]}
+              {optionLabel}
             </button>
           );
         })}

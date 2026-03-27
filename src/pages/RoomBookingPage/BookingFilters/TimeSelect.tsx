@@ -1,12 +1,15 @@
 import { css } from '@emotion/react';
 import { Text, Select } from '_tosslib/components';
 import { colors } from '_tosslib/constants/colors';
-import { TIME_SLOTS } from 'pages/shared/constants';
-import { useStartTimeParam } from '../useFilterParams';
 
-export function StartTimeSelect() {
-  const [startTime, setStartTime] = useStartTimeParam();
+interface TimeSelectProps {
+  label: string;
+  value: string;
+  options: string[];
+  onChange: (value: string) => void;
+}
 
+export function TimeSelect({ label, value, options, onChange }: TimeSelectProps) {
   return (
     <div
       css={css`
@@ -17,11 +20,11 @@ export function StartTimeSelect() {
       `}
     >
       <Text as="label" typography="t7" fontWeight="medium" color={colors.grey600}>
-        시작 시간
+        {label}
       </Text>
-      <Select value={startTime} onChange={e => setStartTime(e.target.value)} aria-label="시작 시간">
+      <Select value={value} onChange={e => onChange(e.target.value)} aria-label={label}>
         <option value="">선택</option>
-        {TIME_SLOTS.slice(0, -1).map(t => (
+        {options.map(t => (
           <option key={t} value={t}>
             {t}
           </option>
