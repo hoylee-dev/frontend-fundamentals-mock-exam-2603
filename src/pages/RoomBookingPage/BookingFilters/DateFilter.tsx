@@ -3,13 +3,13 @@ import { Text } from '_tosslib/components';
 import { colors } from '_tosslib/constants/colors';
 import { formatDate } from 'pages/shared/utils';
 import { dateInputStyle } from 'pages/shared/styles';
-import { useBookingFilterStore } from '../useBookingFilterStore';
-import { useBookingErrorStore } from '../useBookingErrorStore';
 
-export function DateFilter() {
-  const { date, setDate } = useBookingFilterStore();
-  const { setErrorMessage } = useBookingErrorStore();
+interface DateFilterProps {
+  date: string;
+  onDateChange: (date: string) => void;
+}
 
+export function DateFilter({ date, onDateChange }: DateFilterProps) {
   return (
     <div
       css={css`
@@ -25,10 +25,7 @@ export function DateFilter() {
         type="date"
         value={date}
         min={formatDate(new Date())}
-        onChange={e => {
-          setDate(e.target.value);
-          setErrorMessage(null);
-        }}
+        onChange={e => onDateChange(e.target.value)}
         aria-label="날짜"
         css={dateInputStyle}
       />

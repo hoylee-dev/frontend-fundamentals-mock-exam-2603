@@ -1,11 +1,13 @@
 import { Button } from '_tosslib/components';
-import { useBookRoom } from './useBookRoom';
 
-export function ConfirmButton() {
-  const { handleBook, isLoading } = useBookRoom();
+interface ConfirmButtonProps {
+  onBook: () => void;
+  isLoading: boolean;
+}
 
+export function ConfirmButton({ onBook, isLoading }: ConfirmButtonProps) {
   return (
-    <Button display="full" onClick={handleBook} disabled={isLoading}>
+    <Button display="full" onClick={onBook} disabled={isLoading}>
       {isLoading ? '예약 중...' : '확정'}
     </Button>
   );

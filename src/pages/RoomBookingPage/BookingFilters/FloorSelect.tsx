@@ -2,12 +2,13 @@ import { css } from '@emotion/react';
 import { Text, Select } from '_tosslib/components';
 import { colors } from '_tosslib/constants/colors';
 import { useRoomsSuspenseQuery } from 'pages/shared/useRoomsQuery';
-import { useBookingFilterStore } from '../useBookingFilterStore';
-import { useBookingErrorStore } from '../useBookingErrorStore';
 
-export function FloorSelect() {
-  const { preferredFloor, setPreferredFloor } = useBookingFilterStore();
-  const { setErrorMessage } = useBookingErrorStore();
+interface FloorSelectProps {
+  preferredFloor: number | null;
+  onPreferredFloorChange: (floor: number | null) => void;
+}
+
+export function FloorSelect({ preferredFloor, onPreferredFloorChange }: FloorSelectProps) {
   const { data: rooms } = useRoomsSuspenseQuery();
   const floors = [...new Set(rooms.map(r => r.floor))].sort((a, b) => a - b);
 
@@ -25,10 +26,7 @@ export function FloorSelect() {
       </Text>
       <Select
         value={preferredFloor ?? ''}
-        onChange={e => {
-          setPreferredFloor(e.target.value === '' ? null : Number(e.target.value));
-          setErrorMessage(null);
-        }}
+        onChange={e => onPreferredFloorChange(e.target.value === '' ? null : Number(e.target.value))}
         aria-label="선호 층"
       >
         <option value="">전체</option>

@@ -1,8 +1,9 @@
 import { css } from '@emotion/react';
-import { Suspense } from 'react';
+import { Dispatch, SetStateAction, Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { Spacing, Text } from '_tosslib/components';
 import { colors } from '_tosslib/constants/colors';
+import { BookingFilterState } from '../index';
 import { useBookingFilterSync } from './useBookingFilterSync';
 import { DateFilter } from './DateFilter';
 import { StartTimeSelect } from './StartTimeSelect';
@@ -11,8 +12,14 @@ import { AttendeeInput } from './AttendeeInput';
 import { FloorSelect } from './FloorSelect';
 import { EquipmentToggle } from './EquipmentToggle';
 
-export function BookingFilters() {
-  useBookingFilterSync();
+interface BookingFiltersProps {
+  filters: BookingFilterState;
+  setFilters: Dispatch<SetStateAction<BookingFilterState>>;
+  onFilterChange: <K extends keyof BookingFilterState>(key: K, value: BookingFilterState[K]) => void;
+}
+
+export function BookingFilters({ filters, setFilters, onFilterChange }: BookingFiltersProps) {
+  useBookingFilterSync(filters, setFilters);
 
   return (
     <div>
@@ -22,7 +29,7 @@ export function BookingFilters() {
 
       <Spacing size={16} />
 
-      <DateFilter />
+      <DateFilter date={filters.date} onDateChange={v => onFilterChange('date', v)} />
 
       <Spacing size={14} />
 
@@ -32,8 +39,8 @@ export function BookingFilters() {
           gap: 12px;
         `}
       >
-        <StartTimeSelect />
-        <EndTimeSelect />
+        <StartTimeSelect startTime={filters.startTime} onStartTimeChange={v => onFilterChange('startTime', v)} />
+        <EndTimeSelect endTime={filters.endTime} onEndTimeChange={v => onFilterChange('endTime', v)} />
       </div>
 
       <Spacing size={14} />
@@ -44,17 +51,20 @@ export function BookingFilters() {
           gap: 12px;
         `}
       >
-        <AttendeeInput />
+        <AttendeeInput attendees={filters.attendees} onAttendeesChange={v => onFilterChange('attendees', v)} />
         <ErrorBoundary fallback={<FloorSelectErrorFallback />}>
           <Suspense fallback={<FloorSelectFallback />}>
-            <FloorSelect />
+            <FloorSelect
+              preferredFloor={filters.preferredFloor}
+              onPreferredFloorChange={v => onFilterChange('preferredFloor', v)}
+            />
           </Suspense>
         </ErrorBoundary>
       </div>
 
       <Spacing size={14} />
 
-      <EquipmentToggle />
+      <EquipmentToggle equipment={filters.equipment} onEquipmentChange={v => onFilterChange('equipment', v)} />
     </div>
   );
 }

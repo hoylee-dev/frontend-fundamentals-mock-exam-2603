@@ -1,11 +1,12 @@
 import { css } from '@emotion/react';
 import { Text } from '_tosslib/components';
 import { colors } from '_tosslib/constants/colors';
-import { useAvailableRooms } from './useAvailableRooms';
 
-export function AvailableRoomHeader() {
-  const { availableRooms } = useAvailableRooms();
+interface AvailableRoomHeaderProps {
+  roomCount: number;
+}
 
+export function AvailableRoomHeader({ roomCount }: AvailableRoomHeaderProps) {
   return (
     <div
       css={css`
@@ -18,7 +19,7 @@ export function AvailableRoomHeader() {
         예약 가능 회의실
       </Text>
       <Text typography="t7" fontWeight="medium" color={colors.grey500}>
-        {availableRooms.length}개
+        {roomCount}개
       </Text>
     </div>
   );

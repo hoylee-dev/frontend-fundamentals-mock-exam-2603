@@ -3,19 +3,17 @@ import { Text, ListRow } from '_tosslib/components';
 import { colors } from '_tosslib/constants/colors';
 import { EQUIPMENT_LABELS } from 'pages/shared/constants';
 import { Room } from 'pages/shared/types';
-import { useSelectedRoomStore } from '../useSelectedRoomStore';
 
 interface RoomCardProps {
   room: Room;
+  isSelected: boolean;
+  onSelect: (roomId: string) => void;
 }
 
-export function RoomCard({ room }: RoomCardProps) {
-  const { selectedRoomId, setSelectedRoomId } = useSelectedRoomStore();
-  const isSelected = selectedRoomId === room.id;
-
+export function RoomCard({ room, isSelected, onSelect }: RoomCardProps) {
   return (
     <div
-      onClick={() => setSelectedRoomId(room.id)}
+      onClick={() => onSelect(room.id)}
       role="button"
       aria-pressed={isSelected}
       aria-label={room.name}

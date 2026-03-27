@@ -1,10 +1,14 @@
 import { css } from '@emotion/react';
-import { useAvailableRooms } from '../useAvailableRooms';
+import { Room } from 'pages/shared/types';
 import { RoomCard } from './RoomCard';
 
-export function RoomCardList() {
-  const { availableRooms } = useAvailableRooms();
+interface RoomCardListProps {
+  availableRooms: Room[];
+  selectedRoomId: string | null;
+  onSelectRoom: (roomId: string) => void;
+}
 
+export function RoomCardList({ availableRooms, selectedRoomId, onSelectRoom }: RoomCardListProps) {
   return (
     <div
       css={css`
@@ -14,7 +18,7 @@ export function RoomCardList() {
       `}
     >
       {availableRooms.map(room => (
-        <RoomCard key={room.id} room={room} />
+        <RoomCard key={room.id} room={room} isSelected={selectedRoomId === room.id} onSelect={onSelectRoom} />
       ))}
     </div>
   );

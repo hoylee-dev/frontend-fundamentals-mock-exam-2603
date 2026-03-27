@@ -3,16 +3,19 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createReservation } from 'pages/shared/remotes';
 import { reservationKeys, myReservationKeys } from 'pages/shared/queryKeys';
 import axios from 'axios';
-import { useBookingFilterStore } from '../useBookingFilterStore';
-import { useBookingErrorStore } from '../useBookingErrorStore';
-import { useSelectedRoomStore } from './useSelectedRoomStore';
+import { BookingFilterState } from '../index';
 
-export function useBookRoom() {
+interface UseBookRoomParams {
+  filters: BookingFilterState;
+  selectedRoomId: string | null;
+  setSelectedRoomId: (id: string | null) => void;
+  setErrorMessage: (message: string | null) => void;
+}
+
+export function useBookRoom({ filters, selectedRoomId, setSelectedRoomId, setErrorMessage }: UseBookRoomParams) {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const { date, startTime, endTime, attendees, equipment } = useBookingFilterStore();
-  const { setErrorMessage } = useBookingErrorStore();
-  const { selectedRoomId, setSelectedRoomId } = useSelectedRoomStore();
+  const { date, startTime, endTime, attendees, equipment } = filters;
 
   const createMutation = useMutation(
     (data: { roomId: string; date: string; start: string; end: string; attendees: number; equipment: string[] }) =>

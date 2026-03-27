@@ -1,22 +1,18 @@
-import { useEffect, useRef } from 'react';
+import { Dispatch, SetStateAction, useEffect, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Equipment } from 'pages/shared/types';
-import { useBookingFilterStore } from '../useBookingFilterStore';
+import { BookingFilterState } from '../index';
 
-export function useBookingFilterSync() {
+export function useBookingFilterSync(
+  filters: BookingFilterState,
+  setFilters: Dispatch<SetStateAction<BookingFilterState>>
+) {
   const [searchParams, setSearchParams] = useSearchParams();
   const initialized = useRef(false);
 
   if (!initialized.current) {
     initialized.current = true;
-    const updates: Partial<{
-      date: string;
-      startTime: string;
-      endTime: string;
-      attendees: number;
-      equipment: Equipment[];
-      preferredFloor: number | null;
-    }> = {};
+    const updates: Partial<BookingFilterState> = {};
     const date = searchParams.get('date');
     const startTime = searchParams.get('startTime');
     const endTime = searchParams.get('endTime');
@@ -32,11 +28,11 @@ export function useBookingFilterSync() {
     if (floor) updates.preferredFloor = Number(floor);
 
     if (Object.keys(updates).length > 0) {
-      useBookingFilterStore.setState(updates);
+      setFilters(prev => ({ ...prev, ...updates }));
     }
   }
 
-  const { date, startTime, endTime, attendees, equipment, preferredFloor } = useBookingFilterStore();
+  const { date, startTime, endTime, attendees, equipment, preferredFloor } = filters;
 
   useEffect(() => {
     const params: Record<string, string> = {};

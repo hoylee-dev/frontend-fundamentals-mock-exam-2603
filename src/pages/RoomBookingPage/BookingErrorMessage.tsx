@@ -1,9 +1,10 @@
 import { MessageBanner } from 'pages/shared/MessageBanner';
-import { useBookingErrorStore } from './useBookingErrorStore';
 
-export function BookingErrorMessage() {
-  const errorMessage = useBookingErrorStore(state => state.errorMessage);
+interface BookingErrorMessageProps {
+  errorMessage: string | null;
+}
 
+export function BookingErrorMessage({ errorMessage }: BookingErrorMessageProps) {
   if (!errorMessage) {
     return null;
   }

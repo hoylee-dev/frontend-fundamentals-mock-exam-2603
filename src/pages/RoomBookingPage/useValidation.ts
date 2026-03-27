@@ -1,7 +1,7 @@
-import { useBookingFilterStore } from './useBookingFilterStore';
+import { BookingFilterState } from './index';
 
-export function useValidation() {
-  const { startTime, endTime, attendees } = useBookingFilterStore();
+export function useValidation(filters: BookingFilterState) {
+  const { startTime, endTime, attendees } = filters;
 
   const hasTimeInputs = startTime !== '' && endTime !== '';
   let validationError: string | null = null;

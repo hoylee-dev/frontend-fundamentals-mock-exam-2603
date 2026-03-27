@@ -2,13 +2,13 @@ import { css } from '@emotion/react';
 import { Text } from '_tosslib/components';
 import { colors } from '_tosslib/constants/colors';
 import { dateInputStyle } from 'pages/shared/styles';
-import { useBookingFilterStore } from '../useBookingFilterStore';
-import { useBookingErrorStore } from '../useBookingErrorStore';
 
-export function AttendeeInput() {
-  const { attendees, setAttendees } = useBookingFilterStore();
-  const { setErrorMessage } = useBookingErrorStore();
+interface AttendeeInputProps {
+  attendees: number;
+  onAttendeesChange: (count: number) => void;
+}
 
+export function AttendeeInput({ attendees, onAttendeesChange }: AttendeeInputProps) {
   return (
     <div
       css={css`
@@ -25,10 +25,7 @@ export function AttendeeInput() {
         type="number"
         min={1}
         value={attendees}
-        onChange={e => {
-          setAttendees(Math.max(1, Number(e.target.value)));
-          setErrorMessage(null);
-        }}
+        onChange={e => onAttendeesChange(Math.max(1, Number(e.target.value)))}
         aria-label="참석 인원"
         css={dateInputStyle}
       />

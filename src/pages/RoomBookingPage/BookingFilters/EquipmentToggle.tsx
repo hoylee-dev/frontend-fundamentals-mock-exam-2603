@@ -3,19 +3,18 @@ import { Spacing, Text } from '_tosslib/components';
 import { colors } from '_tosslib/constants/colors';
 import { EQUIPMENT_LABELS } from 'pages/shared/constants';
 import { Equipment } from 'pages/shared/types';
-import { useBookingFilterStore } from '../useBookingFilterStore';
-import { useBookingErrorStore } from '../useBookingErrorStore';
 
 const ALL_EQUIPMENT = Object.keys(EQUIPMENT_LABELS) as Equipment[];
 
-export function EquipmentToggle() {
-  const { equipment, setEquipment } = useBookingFilterStore();
-  const { setErrorMessage } = useBookingErrorStore();
+interface EquipmentToggleProps {
+  equipment: Equipment[];
+  onEquipmentChange: (equipment: Equipment[]) => void;
+}
 
+export function EquipmentToggle({ equipment, onEquipmentChange }: EquipmentToggleProps) {
   const toggleEquipment = (eq: Equipment) => {
     const isSelected = equipment.includes(eq);
-    setEquipment(isSelected ? equipment.filter(e => e !== eq) : [...equipment, eq]);
-    setErrorMessage(null);
+    onEquipmentChange(isSelected ? equipment.filter(e => e !== eq) : [...equipment, eq]);
   };
 
   return (

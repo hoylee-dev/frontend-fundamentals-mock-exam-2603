@@ -3,7 +3,7 @@ import { Room, Reservation, Equipment } from 'pages/shared/types';
 import { getReservations } from 'pages/shared/remotes';
 import { reservationKeys } from 'pages/shared/queryKeys';
 import { useRoomsSuspenseQuery } from 'pages/shared/useRoomsQuery';
-import { useBookingFilterStore } from '../useBookingFilterStore';
+import { BookingFilterState } from '../index';
 
 function filterAndSortRooms(
   rooms: Room[],
@@ -42,8 +42,8 @@ function filterAndSortRooms(
     });
 }
 
-export function useAvailableRooms() {
-  const { date, startTime, endTime, attendees, equipment, preferredFloor } = useBookingFilterStore();
+export function useAvailableRooms(filters: BookingFilterState) {
+  const { date, startTime, endTime, attendees, equipment, preferredFloor } = filters;
   const { data: rooms } = useRoomsSuspenseQuery();
   const { data: reservations } = useSuspenseQuery({
     queryKey: reservationKeys.byDate(date),
