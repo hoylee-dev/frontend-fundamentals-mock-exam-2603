@@ -9,15 +9,18 @@ export function useDateParam() {
 
   const setDate = useCallback(
     (value: string) => {
-      setSearchParams(prev => {
-        const next = new URLSearchParams(prev);
-        if (value && value !== formatDate(new Date())) {
-          next.set('date', value);
-        } else {
-          next.delete('date');
-        }
-        return next;
-      }, { replace: true });
+      setSearchParams(
+        prev => {
+          const next = new URLSearchParams(prev);
+          if (value && value !== formatDate(new Date())) {
+            next.set('date', value);
+          } else {
+            next.delete('date');
+          }
+          return next;
+        },
+        { replace: true }
+      );
     },
     [setSearchParams]
   );
@@ -31,15 +34,18 @@ export function useStartTimeParam() {
 
   const setStartTime = useCallback(
     (value: string) => {
-      setSearchParams(prev => {
-        const next = new URLSearchParams(prev);
-        if (value) {
-          next.set('startTime', value);
-        } else {
-          next.delete('startTime');
-        }
-        return next;
-      }, { replace: true });
+      setSearchParams(
+        prev => {
+          const next = new URLSearchParams(prev);
+          if (value) {
+            next.set('startTime', value);
+          } else {
+            next.delete('startTime');
+          }
+          return next;
+        },
+        { replace: true }
+      );
     },
     [setSearchParams]
   );
@@ -53,15 +59,18 @@ export function useEndTimeParam() {
 
   const setEndTime = useCallback(
     (value: string) => {
-      setSearchParams(prev => {
-        const next = new URLSearchParams(prev);
-        if (value) {
-          next.set('endTime', value);
-        } else {
-          next.delete('endTime');
-        }
-        return next;
-      }, { replace: true });
+      setSearchParams(
+        prev => {
+          const next = new URLSearchParams(prev);
+          if (value) {
+            next.set('endTime', value);
+          } else {
+            next.delete('endTime');
+          }
+          return next;
+        },
+        { replace: true }
+      );
     },
     [setSearchParams]
   );
@@ -76,15 +85,18 @@ export function useAttendeesParam() {
 
   const setAttendees = useCallback(
     (value: number) => {
-      setSearchParams(prev => {
-        const next = new URLSearchParams(prev);
-        if (value > 1) {
-          next.set('attendees', String(value));
-        } else {
-          next.delete('attendees');
-        }
-        return next;
-      }, { replace: true });
+      setSearchParams(
+        prev => {
+          const next = new URLSearchParams(prev);
+          if (value > 1) {
+            next.set('attendees', String(value));
+          } else {
+            next.delete('attendees');
+          }
+          return next;
+        },
+        { replace: true }
+      );
     },
     [setSearchParams]
   );
@@ -99,15 +111,18 @@ export function useEquipmentParam() {
 
   const setEquipment = useCallback(
     (value: Equipment[]) => {
-      setSearchParams(prev => {
-        const next = new URLSearchParams(prev);
-        if (value.length > 0) {
-          next.set('equipment', value.join(','));
-        } else {
-          next.delete('equipment');
-        }
-        return next;
-      }, { replace: true });
+      setSearchParams(
+        prev => {
+          const next = new URLSearchParams(prev);
+          if (value.length > 0) {
+            next.set('equipment', value.join(','));
+          } else {
+            next.delete('equipment');
+          }
+          return next;
+        },
+        { replace: true }
+      );
     },
     [setSearchParams]
   );
@@ -122,15 +137,18 @@ export function usePreferredFloorParam() {
 
   const setPreferredFloor = useCallback(
     (value: number | null) => {
-      setSearchParams(prev => {
-        const next = new URLSearchParams(prev);
-        if (value !== null) {
-          next.set('floor', String(value));
-        } else {
-          next.delete('floor');
-        }
-        return next;
-      }, { replace: true });
+      setSearchParams(
+        prev => {
+          const next = new URLSearchParams(prev);
+          if (value !== null) {
+            next.set('floor', String(value));
+          } else {
+            next.delete('floor');
+          }
+          return next;
+        },
+        { replace: true }
+      );
     },
     [setSearchParams]
   );
