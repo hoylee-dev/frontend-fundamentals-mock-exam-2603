@@ -3,9 +3,6 @@ import { server } from './src/_tosslib/server/node';
 import { resetData } from './src/_tosslib/server/handlers';
 import { beforeAll, afterAll, afterEach } from 'vitest';
 import { formatDate } from './src/pages/shared/utils';
-import { useBookingFilterStore } from './src/pages/RoomBookingPage/useBookingFilterStore';
-import { useBookingErrorStore } from './src/pages/RoomBookingPage/useBookingErrorStore';
-import { useSelectedRoomStore } from './src/pages/RoomBookingPage/AvailableRoomList/useSelectedRoomStore';
 import { useDateStore } from './src/pages/ReservationStatusPage/useDateStore';
 import { useMessageStore } from './src/pages/ReservationStatusPage/useMessageStore';
 import { useActiveReservation } from './src/pages/ReservationStatusPage/Timeline/TimelineBody/ReservationBlock/useActiveReservationStore';
@@ -54,16 +51,6 @@ afterEach(() => {
   useDateStore.setState({ date: formatDate(new Date()) });
   useMessageStore.setState({ message: null });
   useActiveReservation.setState({ activeId: null });
-  useBookingFilterStore.setState({
-    date: formatDate(new Date()),
-    startTime: '',
-    endTime: '',
-    attendees: 1,
-    equipment: [],
-    preferredFloor: null,
-  });
-  useBookingErrorStore.setState({ errorMessage: null });
-  useSelectedRoomStore.setState({ selectedRoomId: null });
 });
 afterAll(() => {
   server.close();

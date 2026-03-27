@@ -3,7 +3,14 @@ import { Room, Reservation, Equipment } from 'pages/shared/types';
 import { getReservations } from 'pages/shared/remotes';
 import { reservationKeys } from 'pages/shared/queryKeys';
 import { useRoomsSuspenseQuery } from 'pages/shared/useRoomsQuery';
-import { BookingFilterState } from '../index';
+import {
+  useDateParam,
+  useStartTimeParam,
+  useEndTimeParam,
+  useAttendeesParam,
+  useEquipmentParam,
+  usePreferredFloorParam,
+} from '../useFilterParams';
 
 function filterAndSortRooms(
   rooms: Room[],
@@ -42,8 +49,14 @@ function filterAndSortRooms(
     });
 }
 
-export function useAvailableRooms(filters: BookingFilterState) {
-  const { date, startTime, endTime, attendees, equipment, preferredFloor } = filters;
+export function useAvailableRooms() {
+  const [date] = useDateParam();
+  const [startTime] = useStartTimeParam();
+  const [endTime] = useEndTimeParam();
+  const [attendees] = useAttendeesParam();
+  const [equipment] = useEquipmentParam();
+  const [preferredFloor] = usePreferredFloorParam();
+
   const { data: rooms } = useRoomsSuspenseQuery();
   const { data: reservations } = useSuspenseQuery({
     queryKey: reservationKeys.byDate(date),

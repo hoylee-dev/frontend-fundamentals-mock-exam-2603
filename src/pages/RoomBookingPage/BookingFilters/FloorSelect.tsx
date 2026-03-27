@@ -2,15 +2,12 @@ import { css } from '@emotion/react';
 import { Text, Select } from '_tosslib/components';
 import { colors } from '_tosslib/constants/colors';
 import { useRoomsSuspenseQuery } from 'pages/shared/useRoomsQuery';
+import { usePreferredFloorParam } from '../useFilterParams';
 
-interface FloorSelectProps {
-  preferredFloor: number | null;
-  onPreferredFloorChange: (floor: number | null) => void;
-}
-
-export function FloorSelect({ preferredFloor, onPreferredFloorChange }: FloorSelectProps) {
+export function FloorSelect() {
   const { data: rooms } = useRoomsSuspenseQuery();
   const floors = [...new Set(rooms.map(r => r.floor))].sort((a, b) => a - b);
+  const [preferredFloor, setPreferredFloor] = usePreferredFloorParam();
 
   return (
     <div
@@ -26,7 +23,7 @@ export function FloorSelect({ preferredFloor, onPreferredFloorChange }: FloorSel
       </Text>
       <Select
         value={preferredFloor ?? ''}
-        onChange={e => onPreferredFloorChange(e.target.value === '' ? null : Number(e.target.value))}
+        onChange={e => setPreferredFloor(e.target.value === '' ? null : Number(e.target.value))}
         aria-label="선호 층"
       >
         <option value="">전체</option>

@@ -1,5 +1,4 @@
 import { Spacing } from '_tosslib/components';
-import { BookingFilterState } from '../index';
 import { useAvailableRooms } from './useAvailableRooms';
 import { AvailableRoomHeader } from './AvailableRoomHeader';
 import { EmptyRoomMessage } from './EmptyRoomMessage';
@@ -8,13 +7,12 @@ import { RoomCardList } from './RoomCardList';
 export { ConfirmButton } from './ConfirmButton';
 
 interface AvailableRoomListProps {
-  filters: BookingFilterState;
   selectedRoomId: string | null;
   onSelectRoom: (roomId: string) => void;
 }
 
-export function AvailableRoomList({ filters, selectedRoomId, onSelectRoom }: AvailableRoomListProps) {
-  const { availableRooms } = useAvailableRooms(filters);
+export function AvailableRoomList({ selectedRoomId, onSelectRoom }: AvailableRoomListProps) {
+  const { availableRooms } = useAvailableRooms();
 
   return (
     <div>

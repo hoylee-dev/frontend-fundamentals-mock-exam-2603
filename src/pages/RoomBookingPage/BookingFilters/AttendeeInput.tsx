@@ -2,13 +2,11 @@ import { css } from '@emotion/react';
 import { Text } from '_tosslib/components';
 import { colors } from '_tosslib/constants/colors';
 import { dateInputStyle } from 'pages/shared/styles';
+import { useAttendeesParam } from '../useFilterParams';
 
-interface AttendeeInputProps {
-  attendees: number;
-  onAttendeesChange: (count: number) => void;
-}
+export function AttendeeInput() {
+  const [attendees, setAttendees] = useAttendeesParam();
 
-export function AttendeeInput({ attendees, onAttendeesChange }: AttendeeInputProps) {
   return (
     <div
       css={css`
@@ -25,7 +23,7 @@ export function AttendeeInput({ attendees, onAttendeesChange }: AttendeeInputPro
         type="number"
         min={1}
         value={attendees}
-        onChange={e => onAttendeesChange(Math.max(1, Number(e.target.value)))}
+        onChange={e => setAttendees(Math.max(1, Number(e.target.value)))}
         aria-label="참석 인원"
         css={dateInputStyle}
       />

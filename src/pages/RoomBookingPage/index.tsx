@@ -1,10 +1,9 @@
 import { css } from '@emotion/react';
-import { Suspense, useState, useCallback } from 'react';
+import { Suspense, useState, useEffect, useRef } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
+import { useSearchParams } from 'react-router-dom';
 import { Top, Spacing, Border, Text } from '_tosslib/components';
 import { colors } from '_tosslib/constants/colors';
-import { Equipment } from 'pages/shared/types';
-import { formatDate } from 'pages/shared/utils';
 import { sectionPadding } from 'pages/shared/styles';
 import { BackButton } from './BackButton';
 import { BookingErrorMessage } from './BookingErrorMessage';
@@ -14,34 +13,22 @@ import { AvailableRoomList, ConfirmButton } from './AvailableRoomList';
 import { useValidation } from './useValidation';
 import { useBookRoom } from './AvailableRoomList/useBookRoom';
 
-export interface BookingFilterState {
-  date: string;
-  startTime: string;
-  endTime: string;
-  attendees: number;
-  equipment: Equipment[];
-  preferredFloor: number | null;
-}
-
 export function RoomBookingPage() {
-  const [filters, setFilters] = useState<BookingFilterState>({
-    date: formatDate(new Date()),
-    startTime: '',
-    endTime: '',
-    attendees: 1,
-    equipment: [],
-    preferredFloor: null,
-  });
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [selectedRoomId, setSelectedRoomId] = useState<string | null>(null);
 
-  const updateFilter = useCallback(<K extends keyof BookingFilterState>(key: K, value: BookingFilterState[K]) => {
-    setFilters(prev => ({ ...prev, [key]: value }));
-    setErrorMessage(null);
-  }, []);
+  const [searchParams] = useSearchParams();
+  const prevParamsRef = useRef(searchParams.toString());
+  useEffect(() => {
+    const current = searchParams.toString();
+    if (prevParamsRef.current !== current) {
+      prevParamsRef.current = current;
+      setErrorMessage(null);
+    }
+  }, [searchParams]);
 
-  const { isFilterComplete, validationError } = useValidation(filters);
-  const { handleBook, isLoading } = useBookRoom({ filters, selectedRoomId, setSelectedRoomId, setErrorMessage });
+  const { isFilterComplete } = useValidation();
+  const { handleBook, isLoading } = useBookRoom({ selectedRoomId, setSelectedRoomId, setErrorMessage });
 
   return (
     <div
@@ -74,10 +61,10 @@ export function RoomBookingPage() {
       <Spacing size={24} />
 
       <div css={sectionPadding}>
-        <BookingFilters filters={filters} setFilters={setFilters} onFilterChange={updateFilter} />
+        <BookingFilters />
       </div>
 
-      <ValidationError validationError={validationError} />
+      <ValidationError />
 
       <Spacing size={24} />
       <Border size={8} />
@@ -87,11 +74,7 @@ export function RoomBookingPage() {
         <div css={sectionPadding}>
           <ErrorBoundary fallback={<AvailableRoomListErrorFallback />}>
             <Suspense fallback={<AvailableRoomListFallback />}>
-              <AvailableRoomList
-                filters={filters}
-                selectedRoomId={selectedRoomId}
-                onSelectRoom={setSelectedRoomId}
-              />
+              <AvailableRoomList selectedRoomId={selectedRoomId} onSelectRoom={setSelectedRoomId} />
             </Suspense>
           </ErrorBoundary>
 

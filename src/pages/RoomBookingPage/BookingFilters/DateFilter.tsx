@@ -3,13 +3,11 @@ import { Text } from '_tosslib/components';
 import { colors } from '_tosslib/constants/colors';
 import { formatDate } from 'pages/shared/utils';
 import { dateInputStyle } from 'pages/shared/styles';
+import { useDateParam } from '../useFilterParams';
 
-interface DateFilterProps {
-  date: string;
-  onDateChange: (date: string) => void;
-}
+export function DateFilter() {
+  const [date, setDate] = useDateParam();
 
-export function DateFilter({ date, onDateChange }: DateFilterProps) {
   return (
     <div
       css={css`
@@ -25,7 +23,7 @@ export function DateFilter({ date, onDateChange }: DateFilterProps) {
         type="date"
         value={date}
         min={formatDate(new Date())}
-        onChange={e => onDateChange(e.target.value)}
+        onChange={e => setDate(e.target.value)}
         aria-label="날짜"
         css={dateInputStyle}
       />
