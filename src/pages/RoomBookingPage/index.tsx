@@ -27,7 +27,7 @@ export function RoomBookingPage() {
     }
   }, [searchParams]);
 
-  const { isFilterComplete } = useValidation();
+  const { isFilterValid } = useValidation();
   const { handleBook, isLoading } = useBookRoom({ selectedRoomId, setSelectedRoomId, setErrorMessage });
 
   return (
@@ -70,7 +70,7 @@ export function RoomBookingPage() {
       <Border size={8} />
       <Spacing size={24} />
 
-      {isFilterComplete && (
+      {isFilterValid && (
         <div css={sectionPadding}>
           <ErrorBoundary fallback={<AvailableRoomListErrorFallback />}>
             <Suspense fallback={<AvailableRoomListFallback />}>

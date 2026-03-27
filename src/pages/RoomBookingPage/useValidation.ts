@@ -1,3 +1,4 @@
+import { z } from 'zod';
 import { useStartTimeParam, useEndTimeParam, useAttendeesParam } from './useFilterParams';
 
 export function useValidation() {
@@ -7,14 +8,25 @@ export function useValidation() {
 
   const hasTimeInputs = startTime !== '' && endTime !== '';
   let validationError: string | null = null;
+
   if (hasTimeInputs) {
-    if (endTime <= startTime) {
-      validationError = '종료 시간은 시작 시간보다 늦어야 합니다.';
-    } else if (attendees < 1) {
-      validationError = '참석 인원은 1명 이상이어야 합니다.';
+    const result = bookingFilterSchema.safeParse({ startTime, endTime, attendees });
+    if (!result.success) {
+      validationError = result.error.issues[0].message;
     }
   }
-  const isFilterComplete = hasTimeInputs && !validationError;
 
-  return { validationError, isFilterComplete };
+  const isFilterValid = hasTimeInputs && !validationError;
+
+  return { validationError, isFilterValid };
 }
+
+const bookingFilterSchema = z
+  .object({
+    startTime: z.string().min(1),
+    endTime: z.string().min(1),
+    attendees: z.number().min(1, '참석 인원은 1명 이상이어야 합니다.'),
+  })
+  .refine(({ startTime, endTime }) => endTime > startTime, {
+    message: '종료 시간은 시작 시간보다 늦어야 합니다.',
+  });
