@@ -4,7 +4,7 @@ import { colors } from '_tosslib/constants/colors';
 import { EQUIPMENT_LABELS } from 'pages/shared/constants';
 import { Reservation } from 'pages/shared/types';
 import { useRoomsSuspenseQuery } from 'pages/shared/useRoomsQuery';
-import { Message } from '../../index';
+import { Message } from '../index';
 import { useCancelReservation } from './useCancelReservation';
 
 interface MyReservationCardProps {
@@ -13,7 +13,7 @@ interface MyReservationCardProps {
 }
 
 export function MyReservationCard({ reservation, setMessage }: MyReservationCardProps) {
-  const { handleCancel } = useCancelReservation(setMessage);
+  const { handleCancelReservation } = useCancelReservation();
   const { data: rooms } = useRoomsSuspenseQuery();
   const roomName = rooms.find(r => r.id === reservation.roomId)?.name ?? reservation.roomId;
 
@@ -42,9 +42,14 @@ export function MyReservationCard({ reservation, setMessage }: MyReservationCard
             type="danger"
             style="weak"
             size="small"
-            onClick={e => {
+            onClick={async e => {
               e.stopPropagation();
-              handleCancel(reservation.id);
+              try {
+                await handleCancelReservation(reservation.id);
+                setMessage({ type: 'success', text: '예약이 취소되었습니다.' });
+              } catch {
+                setMessage({ type: 'error', text: '취소에 실패했습니다.' });
+              }
             }}
           >
             취소
