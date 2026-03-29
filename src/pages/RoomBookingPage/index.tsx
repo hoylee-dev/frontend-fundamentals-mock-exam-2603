@@ -83,7 +83,7 @@ export function RoomBookingPage() {
 
           <Spacing size={16} />
 
-          <ConfirmButton onBook={handleBook} isLoading={isLoading} />
+          <ConfirmButton label="확정" loadingLabel="예약 중..." onClick={handleBook} isLoading={isLoading} />
         </div>
       )}
 
