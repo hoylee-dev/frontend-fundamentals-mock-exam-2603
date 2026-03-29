@@ -10,15 +10,14 @@ import { ReservationBlock } from './ReservationBlock';
 interface TimelineRowProps {
   room: Room;
   date: string;
-  isFirst: boolean;
 }
 
-export function TimelineRow({ room, date, isFirst }: TimelineRowProps) {
-  const { data: reservations } = useSuspenseQuery({
+export function TimelineRow({ room, date }: TimelineRowProps) {
+  const { data: roomReservations } = useSuspenseQuery({
     queryKey: reservationKeys.byDate(date),
     queryFn: () => getReservations(date),
+    select: reservations => reservations.filter(r => r.roomId === room.id),
   });
-  const roomReservations = reservations.filter(r => r.roomId === room.id);
 
   return (
     <div
@@ -26,7 +25,6 @@ export function TimelineRow({ room, date, isFirst }: TimelineRowProps) {
         display: flex;
         align-items: center;
         height: 32px;
-        ${!isFirst ? 'margin-top: 4px;' : ''}
       `}
     >
       <div

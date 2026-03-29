@@ -1,10 +1,11 @@
 import { Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { css } from '@emotion/react';
-import { Spacing, Text } from '_tosslib/components';
+import { Text } from '_tosslib/components';
 import { colors } from '_tosslib/constants/colors';
+import { useRoomsSuspenseQuery } from 'pages/shared/useRoomsQuery';
 import { TimelineHeader } from './TimelineHeader';
-import { TimelineBody } from './TimelineBody';
+import { TimelineRow } from './TimelineRow';
 
 interface TimelineProps {
   date: string;
@@ -12,26 +13,38 @@ interface TimelineProps {
 
 export function Timeline({ date }: TimelineProps) {
   return (
-    <div>
-      <Text typography="t5" fontWeight="bold" color={colors.grey900}>
-        예약 현황
-      </Text>
-      <Spacing size={16} />
+    <div
+      css={css`
+        background: ${colors.grey50};
+        border-radius: 14px;
+        padding: 16px;
+      `}
+    >
+      <TimelineHeader />
+      {/* todo: suspensive */}
+      <ErrorBoundary fallback={<TimelineBodyErrorFallback />}>
+        <Suspense fallback={<TimelineBodyFallback />}>
+          <TimelineBody date={date} />
+        </Suspense>
+      </ErrorBoundary>
+    </div>
+  );
+}
 
-      <div
-        css={css`
-          background: ${colors.grey50};
-          border-radius: 14px;
-          padding: 16px;
-        `}
-      >
-        <TimelineHeader />
-        <ErrorBoundary fallback={<TimelineBodyErrorFallback />}>
-          <Suspense fallback={<TimelineBodyFallback />}>
-            <TimelineBody date={date} />
-          </Suspense>
-        </ErrorBoundary>
-      </div>
+function TimelineBody({ date }: { date: string }) {
+  const { data: rooms } = useRoomsSuspenseQuery();
+
+  return (
+    <div
+      css={css`
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      `}
+    >
+      {rooms.map(room => (
+        <TimelineRow key={room.id} room={room} date={date} />
+      ))}
     </div>
   );
 }

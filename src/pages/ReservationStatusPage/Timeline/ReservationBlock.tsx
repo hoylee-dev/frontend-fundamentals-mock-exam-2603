@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { css } from '@emotion/react';
 import { colors } from '_tosslib/constants/colors';
-import { Reservation } from 'pages/shared/types';
-import { TOTAL_MINUTES, timeToMinutes } from '../../timelineUtils';
-import { ReservationTooltip } from './ReservationTooltip';
+import { EQUIPMENT_LABELS } from 'pages/shared/constants';
+import { Reservation, Equipment } from 'pages/shared/types';
+import { TOTAL_MINUTES, timeToMinutes } from './timelineUtils';
 
 interface ReservationBlockProps {
   reservation: Reservation;
@@ -50,6 +50,46 @@ export function ReservationBlock({ reservation, roomName }: ReservationBlockProp
           equipment={reservation.equipment}
         />
       )}
+    </div>
+  );
+}
+
+function ReservationTooltip({
+  start,
+  end,
+  attendees,
+  equipment,
+}: {
+  start: string;
+  end: string;
+  attendees: number;
+  equipment: Equipment[];
+}) {
+  return (
+    <div
+      role="tooltip"
+      css={css`
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        margin-top: 6px;
+        background: ${colors.grey900};
+        color: ${colors.white};
+        padding: 8px 12px;
+        border-radius: 8px;
+        font-size: 12px;
+        white-space: nowrap;
+        z-index: 10;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+        line-height: 1.6;
+      `}
+    >
+      <div>
+        {start} ~ {end}
+      </div>
+      <div>{attendees}명</div>
+      {equipment.length > 0 && <div>{equipment.map(e => EQUIPMENT_LABELS[e]).join(', ')}</div>}
     </div>
   );
 }
