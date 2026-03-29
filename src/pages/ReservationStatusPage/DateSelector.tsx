@@ -2,11 +2,13 @@ import { Spacing, Text } from '_tosslib/components';
 import { colors } from '_tosslib/constants/colors';
 import { formatDate } from 'pages/shared/utils';
 import { dateInputStyle } from 'pages/shared/styles';
-import { useDateStore } from './useDateStore';
 
-export function DateSelector() {
-  const { date, setDate } = useDateStore();
+interface DateSelectorProps {
+  date: string;
+  onDateChange: (date: string) => void;
+}
 
+export function DateSelector({ date, onDateChange }: DateSelectorProps) {
   return (
     <div>
       <Text typography="t5" fontWeight="bold" color={colors.grey900}>
@@ -17,7 +19,7 @@ export function DateSelector() {
         type="date"
         value={date}
         min={formatDate(new Date())}
-        onChange={e => setDate(e.target.value)}
+        onChange={e => onDateChange(e.target.value)}
         aria-label="날짜"
         css={dateInputStyle}
       />

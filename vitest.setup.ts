@@ -2,10 +2,6 @@ import '@testing-library/jest-dom/vitest';
 import { server } from './src/_tosslib/server/node';
 import { resetData } from './src/_tosslib/server/handlers';
 import { beforeAll, afterAll, afterEach } from 'vitest';
-import { formatDate } from './src/pages/shared/utils';
-import { useDateStore } from './src/pages/ReservationStatusPage/useDateStore';
-import { useMessageStore } from './src/pages/ReservationStatusPage/useMessageStore';
-import { useActiveReservation } from './src/pages/ReservationStatusPage/Timeline/TimelineBody/ReservationBlock/useActiveReservationStore';
 
 // Canvas mock for lottie-web
 HTMLCanvasElement.prototype.getContext = (() => {
@@ -47,10 +43,6 @@ beforeAll(() => {
 afterEach(() => {
   server.resetHandlers();
   resetData();
-
-  useDateStore.setState({ date: formatDate(new Date()) });
-  useMessageStore.setState({ message: null });
-  useActiveReservation.setState({ activeId: null });
 });
 afterAll(() => {
   server.close();

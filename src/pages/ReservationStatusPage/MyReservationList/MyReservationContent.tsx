@@ -1,10 +1,15 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { getMyReservations } from 'pages/shared/remotes';
 import { myReservationKeys } from 'pages/shared/queryKeys';
+import { Message } from '../index';
 import { MyReservationEmpty } from './MyReservationEmpty';
 import { MyReservationBody } from './MyReservationBody';
 
-export function MyReservationContent() {
+interface MyReservationContentProps {
+  setMessage: (message: Message | null) => void;
+}
+
+export function MyReservationContent({ setMessage }: MyReservationContentProps) {
   const { data: myReservations } = useSuspenseQuery({
     queryKey: myReservationKeys.all,
     queryFn: getMyReservations,
@@ -14,5 +19,5 @@ export function MyReservationContent() {
     return <MyReservationEmpty />;
   }
 
-  return <MyReservationBody />;
+  return <MyReservationBody setMessage={setMessage} />;
 }

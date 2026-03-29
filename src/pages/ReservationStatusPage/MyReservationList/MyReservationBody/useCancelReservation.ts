@@ -1,11 +1,10 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { cancelReservation } from 'pages/shared/remotes';
 import { reservationKeys, myReservationKeys } from 'pages/shared/queryKeys';
-import { useMessageStore } from '../../useMessageStore';
+import { Message } from '../../index';
 
-export function useCancelReservation() {
+export function useCancelReservation(setMessage: (message: Message | null) => void) {
   const queryClient = useQueryClient();
-  const setMessage = useMessageStore(state => state.setMessage);
 
   const cancelMutation = useMutation((id: string) => cancelReservation(id), {
     onSuccess: () => {

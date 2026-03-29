@@ -1,14 +1,21 @@
+import { useState } from 'react';
 import { css } from '@emotion/react';
 import { Top, Spacing, Border } from '_tosslib/components';
 import { colors } from '_tosslib/constants/colors';
 import { sectionPadding } from 'pages/shared/styles';
+import { formatDate } from 'pages/shared/utils';
 import { DateSelector } from './DateSelector';
 import { Timeline } from './Timeline';
 import { StatusMessage } from './StatusMessage';
 import { MyReservationList } from './MyReservationList';
 import { BookingButton } from './BookingButton';
 
+export type Message = { type: 'success' | 'error'; text: string };
+
 export function ReservationStatusPage() {
+  const [date, setDate] = useState(() => formatDate(new Date()));
+  const [message, setMessage] = useState<Message | null>(null);
+
   return (
     <div
       css={css`
@@ -28,7 +35,7 @@ export function ReservationStatusPage() {
       <Spacing size={24} />
 
       <div css={sectionPadding}>
-        <DateSelector />
+        <DateSelector date={date} onDateChange={setDate} />
       </div>
 
       <Spacing size={24} />
@@ -36,7 +43,7 @@ export function ReservationStatusPage() {
       <Spacing size={24} />
 
       <div css={sectionPadding}>
-        <Timeline />
+        <Timeline date={date} />
       </div>
 
       <Spacing size={24} />
@@ -44,12 +51,12 @@ export function ReservationStatusPage() {
       <Spacing size={24} />
 
       <div css={sectionPadding}>
-        <StatusMessage />
+        <StatusMessage message={message} setMessage={setMessage} />
         <Spacing size={12} />
       </div>
 
       <div css={sectionPadding}>
-        <MyReservationList />
+        <MyReservationList setMessage={setMessage} />
       </div>
 
       <Spacing size={24} />

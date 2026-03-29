@@ -2,9 +2,14 @@ import { css } from '@emotion/react';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { getMyReservations } from 'pages/shared/remotes';
 import { myReservationKeys } from 'pages/shared/queryKeys';
+import { Message } from '../../index';
 import { MyReservationCard } from './MyReservationCard';
 
-export function MyReservationBody() {
+interface MyReservationBodyProps {
+  setMessage: (message: Message | null) => void;
+}
+
+export function MyReservationBody({ setMessage }: MyReservationBodyProps) {
   const { data: myReservations } = useSuspenseQuery({
     queryKey: myReservationKeys.all,
     queryFn: getMyReservations,
@@ -19,7 +24,7 @@ export function MyReservationBody() {
       `}
     >
       {myReservations.map(res => (
-        <MyReservationCard key={res.id} reservation={res} />
+        <MyReservationCard key={res.id} reservation={res} setMessage={setMessage} />
       ))}
     </div>
   );

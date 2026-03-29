@@ -1,11 +1,15 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { MessageBanner } from 'pages/shared/MessageBanner';
-import { useMessageStore } from './useMessageStore';
+import { Message } from './index';
 
-export function StatusMessage() {
-  useLocationMessage();
-  const message = useMessageStore(state => state.message);
+interface StatusMessageProps {
+  message: Message | null;
+  setMessage: (message: Message | null) => void;
+}
+
+export function StatusMessage({ message, setMessage }: StatusMessageProps) {
+  useLocationMessage(setMessage);
 
   if (!message) {
     return null;
@@ -14,10 +18,9 @@ export function StatusMessage() {
   return <MessageBanner type={message.type} text={message.text} />;
 }
 
-function useLocationMessage() {
+function useLocationMessage(setMessage: (message: Message | null) => void) {
   const location = useLocation();
   const locationState = location.state as { message?: string } | null;
-  const setMessage = useMessageStore(state => state.setMessage);
 
   useEffect(() => {
     if (locationState?.message) {

@@ -4,14 +4,16 @@ import { colors } from '_tosslib/constants/colors';
 import { EQUIPMENT_LABELS } from 'pages/shared/constants';
 import { Reservation } from 'pages/shared/types';
 import { useRoomsSuspenseQuery } from 'pages/shared/useRoomsQuery';
+import { Message } from '../../index';
 import { useCancelReservation } from './useCancelReservation';
 
 interface MyReservationCardProps {
   reservation: Reservation;
+  setMessage: (message: Message | null) => void;
 }
 
-export function MyReservationCard({ reservation }: MyReservationCardProps) {
-  const { handleCancel } = useCancelReservation();
+export function MyReservationCard({ reservation, setMessage }: MyReservationCardProps) {
+  const { handleCancel } = useCancelReservation(setMessage);
   const { data: rooms } = useRoomsSuspenseQuery();
   const roomName = rooms.find(r => r.id === reservation.roomId)?.name ?? reservation.roomId;
 

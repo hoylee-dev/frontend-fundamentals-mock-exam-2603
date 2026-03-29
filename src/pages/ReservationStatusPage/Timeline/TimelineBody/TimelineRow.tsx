@@ -5,16 +5,15 @@ import { colors } from '_tosslib/constants/colors';
 import { Room } from 'pages/shared/types';
 import { getReservations } from 'pages/shared/remotes';
 import { reservationKeys } from 'pages/shared/queryKeys';
-import { useDateStore } from '../../useDateStore';
 import { ReservationBlock } from './ReservationBlock';
 
 interface TimelineRowProps {
   room: Room;
+  date: string;
   isFirst: boolean;
 }
 
-export function TimelineRow({ room, isFirst }: TimelineRowProps) {
-  const date = useDateStore(state => state.date);
+export function TimelineRow({ room, date, isFirst }: TimelineRowProps) {
   const { data: reservations } = useSuspenseQuery({
     queryKey: reservationKeys.byDate(date),
     queryFn: () => getReservations(date),

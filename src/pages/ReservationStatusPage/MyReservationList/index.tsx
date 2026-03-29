@@ -6,7 +6,13 @@ import { colors } from '_tosslib/constants/colors';
 import { MyReservationHeader } from './MyReservationHeader';
 import { MyReservationContent } from './MyReservationContent';
 
-export function MyReservationList() {
+import { Message } from '../index';
+
+interface MyReservationListProps {
+  setMessage: (message: Message | null) => void;
+}
+
+export function MyReservationList({ setMessage }: MyReservationListProps) {
   return (
     <div>
       <ErrorBoundary fallback={<MyReservationHeaderErrorFallback />}>
@@ -17,7 +23,7 @@ export function MyReservationList() {
       <Spacing size={16} />
       <ErrorBoundary fallback={<MyReservationErrorFallback />}>
         <Suspense fallback={<MyReservationContentFallback />}>
-          <MyReservationContent />
+          <MyReservationContent setMessage={setMessage} />
         </Suspense>
       </ErrorBoundary>
     </div>

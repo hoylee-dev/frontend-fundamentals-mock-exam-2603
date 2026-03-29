@@ -6,7 +6,11 @@ import { colors } from '_tosslib/constants/colors';
 import { TimelineHeader } from './TimelineHeader';
 import { TimelineBody } from './TimelineBody';
 
-export function Timeline() {
+interface TimelineProps {
+  date: string;
+}
+
+export function Timeline({ date }: TimelineProps) {
   return (
     <div>
       <Text typography="t5" fontWeight="bold" color={colors.grey900}>
@@ -24,7 +28,7 @@ export function Timeline() {
         <TimelineHeader />
         <ErrorBoundary fallback={<TimelineBodyErrorFallback />}>
           <Suspense fallback={<TimelineBodyFallback />}>
-            <TimelineBody />
+            <TimelineBody date={date} />
           </Suspense>
         </ErrorBoundary>
       </div>

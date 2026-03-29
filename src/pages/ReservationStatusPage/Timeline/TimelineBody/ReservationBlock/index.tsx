@@ -1,9 +1,9 @@
+import { useState } from 'react';
 import { css } from '@emotion/react';
 import { colors } from '_tosslib/constants/colors';
 import { Reservation } from 'pages/shared/types';
 import { TOTAL_MINUTES, timeToMinutes } from '../../timelineUtils';
 import { ReservationTooltip } from './ReservationTooltip';
-import { useActiveReservation } from './useActiveReservationStore';
 
 interface ReservationBlockProps {
   reservation: Reservation;
@@ -11,8 +11,7 @@ interface ReservationBlockProps {
 }
 
 export function ReservationBlock({ reservation, roomName }: ReservationBlockProps) {
-  const { activeId, toggle } = useActiveReservation();
-  const isActive = activeId === reservation.id;
+  const [isActive, setIsActive] = useState(false);
 
   const left = (timeToMinutes(reservation.start) / TOTAL_MINUTES) * 100;
   const width = ((timeToMinutes(reservation.end) - timeToMinutes(reservation.start)) / TOTAL_MINUTES) * 100;
@@ -29,7 +28,7 @@ export function ReservationBlock({ reservation, roomName }: ReservationBlockProp
       <div
         role="button"
         aria-label={`${roomName} ${reservation.start}-${reservation.end} 예약 상세`}
-        onClick={() => toggle(reservation.id)}
+        onClick={() => setIsActive(prev => !prev)}
         css={css`
           width: 100%;
           height: 100%;
