@@ -8,7 +8,7 @@ import { sectionPadding } from 'pages/shared/styles';
 import { BackButton } from './BackButton';
 import { BookingErrorMessage } from './BookingErrorMessage';
 import { BookingFilters } from './BookingFilters';
-import { ValidationError } from './ValidationError';
+import { InlineError } from './InlineError';
 import { AvailableRoomList, ConfirmButton } from './AvailableRoomList';
 import { useValidation } from './useValidation';
 import { useBookRoom } from './AvailableRoomList/useBookRoom';
@@ -27,7 +27,7 @@ export function RoomBookingPage() {
     }
   }, [searchParams]);
 
-  const { isFilterValid } = useValidation();
+  const { validationError, isFilterValid } = useValidation();
   const { handleBook, isLoading } = useBookRoom({ selectedRoomId, setSelectedRoomId, setErrorMessage });
 
   return (
@@ -64,7 +64,10 @@ export function RoomBookingPage() {
         <BookingFilters />
       </div>
 
-      <ValidationError />
+      <div css={sectionPadding}>
+        <Spacing size={8} />
+        <InlineError message={validationError} />
+      </div>
 
       <Spacing size={24} />
       <Border size={8} />
