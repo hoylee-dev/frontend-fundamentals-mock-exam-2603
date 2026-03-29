@@ -14,18 +14,8 @@ import { useValidation } from './useValidation';
 import { useBookRoom } from './AvailableRoomList/useBookRoom';
 
 export function RoomBookingPage() {
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useResetOnFilterChange<string | null>(null);
   const [selectedRoomId, setSelectedRoomId] = useState<string | null>(null);
-
-  const [searchParams] = useSearchParams();
-  const prevParamsRef = useRef(searchParams.toString());
-  useEffect(() => {
-    const current = searchParams.toString();
-    if (prevParamsRef.current !== current) {
-      prevParamsRef.current = current;
-      setErrorMessage(null);
-    }
-  }, [searchParams]);
 
   const { validationError, isFilterValid } = useValidation();
   const { handleBook, isLoading } = useBookRoom({ selectedRoomId, setSelectedRoomId, setErrorMessage });
@@ -90,6 +80,22 @@ export function RoomBookingPage() {
       <Spacing size={24} />
     </div>
   );
+}
+
+function useResetOnFilterChange<T>(initialValue: T): [T, (value: T) => void] {
+  const [value, setValue] = useState<T>(initialValue);
+
+  const [searchParams] = useSearchParams();
+  const prevParamsRef = useRef(searchParams.toString());
+  useEffect(() => {
+    const current = searchParams.toString();
+    if (prevParamsRef.current !== current) {
+      prevParamsRef.current = current;
+      setValue(initialValue);
+    }
+  }, [searchParams, initialValue]);
+
+  return [value, setValue];
 }
 
 function AvailableRoomListFallback() {
