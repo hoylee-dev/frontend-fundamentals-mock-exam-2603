@@ -22,7 +22,14 @@ export function DateFilter({ label, value, min, onChange }: DateFilterProps) {
       <Text as="label" typography="t7" fontWeight="medium" color={colors.grey600}>
         {label}
       </Text>
-      <input type="date" value={value} min={min} onChange={e => onChange(e.target.value)} aria-label={label} css={dateInputStyle} />
+      <input
+        type="date"
+        value={value}
+        min={min}
+        onChange={e => onChange(e.target.value)}
+        aria-label={label}
+        css={dateInputStyle}
+      />
     </div>
   );
 }
