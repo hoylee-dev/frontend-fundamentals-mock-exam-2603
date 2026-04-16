@@ -11,7 +11,7 @@ import { BookingFilters } from './BookingFilters';
 import { InlineError } from './InlineError';
 import { AvailableRoomList, ConfirmButton } from './AvailableRoomList';
 import { useValidation } from './useValidation';
-import { useBookRoom } from './AvailableRoomList/useBookRoom';
+import { useCreateReservationMutation } from './AvailableRoomList/useCreateReservationMutation';
 import { MessageBanner } from 'pages/shared/MessageBanner';
 import {
   useDateParam,
@@ -32,7 +32,7 @@ export function RoomBookingPage() {
   const [equipment] = useEquipmentParam();
 
   const { validationError, isFilterValid } = useValidation();
-  const { mutateAsync: bookRoom, isPending: isLoading } = useBookRoom();
+  const { mutateAsync: createReservation, isPending: isLoading } = useCreateReservationMutation();
 
   const handleBook = async () => {
     if (!selectedRoomId) {
@@ -41,7 +41,7 @@ export function RoomBookingPage() {
     }
 
     try {
-      const result = await bookRoom({
+      const result = await createReservation({
         roomId: selectedRoomId,
         date,
         start: startTime,

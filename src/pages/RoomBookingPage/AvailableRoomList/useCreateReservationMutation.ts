@@ -3,7 +3,7 @@ import { createReservation } from 'pages/shared/remotes';
 import { reservationKeys, myReservationKeys } from 'pages/shared/queryKeys';
 import { Equipment } from 'pages/shared/types';
 
-interface BookRoomInput {
+interface CreateReservationInput {
   roomId: string;
   date: string;
   start: string;
@@ -12,11 +12,11 @@ interface BookRoomInput {
   equipment: Equipment[];
 }
 
-export function useBookRoom() {
+export function useCreateReservationMutation() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: BookRoomInput) => createReservation(data),
+    mutationFn: (data: CreateReservationInput) => createReservation(data),
     onSuccess: (_data, variables) => {
       queryClient.invalidateQueries({ queryKey: reservationKeys.byDate(variables.date) });
       queryClient.invalidateQueries({ queryKey: myReservationKeys.all });
