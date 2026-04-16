@@ -3,6 +3,7 @@ import { useCallback } from 'react';
 import { Equipment } from 'pages/shared/types';
 import { formatDate } from 'pages/shared/utils';
 
+// nuqs?
 export function useDateParam() {
   const [searchParams, setSearchParams] = useSearchParams();
   const date = searchParams.get('date') || formatDate(new Date());
@@ -32,6 +33,7 @@ export function useStartTimeParam() {
   const [searchParams, setSearchParams] = useSearchParams();
   const startTime = searchParams.get('startTime') || '';
 
+  // useCallback이 꼭 필요할까?
   const setStartTime = useCallback(
     (value: string) => {
       setSearchParams(

@@ -31,6 +31,8 @@ export function Timeline({ date }: TimelineProps) {
   );
 }
 
+// TimelineHeader는 추상화. TimelineBody는 파일내 위치시켰음.
+
 function TimelineBody({ date }: { date: string }) {
   const { data: rooms } = useRoomsSuspenseQuery();
 
