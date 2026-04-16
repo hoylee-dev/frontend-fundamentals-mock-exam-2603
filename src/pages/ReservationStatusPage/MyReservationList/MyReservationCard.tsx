@@ -45,6 +45,9 @@ export function MyReservationCard({ reservation, setMessage }: MyReservationCard
             onClick={async e => {
               e.stopPropagation();
               try {
+                if (!window.confirm('정말 취소하시겠습니까?')) {
+                  return;
+                }
                 await handleCancelReservation(reservation.id);
                 setMessage({ type: 'success', text: '예약이 취소되었습니다.' });
               } catch {

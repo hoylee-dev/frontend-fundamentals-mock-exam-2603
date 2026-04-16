@@ -6,12 +6,12 @@ import { Top, Spacing, Border, Text } from '_tosslib/components';
 import { colors } from '_tosslib/constants/colors';
 import { sectionPadding } from 'pages/shared/styles';
 import { BackButton } from './BackButton';
-import { BookingErrorMessage } from './BookingErrorMessage';
 import { BookingFilters } from './BookingFilters';
 import { InlineError } from './InlineError';
 import { AvailableRoomList, ConfirmButton } from './AvailableRoomList';
 import { useValidation } from './useValidation';
 import { useBookRoom } from './AvailableRoomList/useBookRoom';
+import { MessageBanner } from 'pages/shared/MessageBanner';
 
 export function RoomBookingPage() {
   const [errorMessage, setErrorMessage] = useResetOnFilterChange<string | null>(null);
@@ -45,7 +45,7 @@ export function RoomBookingPage() {
 
       <div css={sectionPadding}>
         <Spacing size={12} />
-        <BookingErrorMessage errorMessage={errorMessage} />
+        {errorMessage && <MessageBanner type="error" text={errorMessage} />}
       </div>
 
       <Spacing size={24} />
@@ -56,7 +56,7 @@ export function RoomBookingPage() {
 
       <div css={sectionPadding}>
         <Spacing size={8} />
-        <InlineError message={validationError} />
+        {validationError && <InlineError message={validationError} />}
       </div>
 
       <Spacing size={24} />

@@ -13,6 +13,7 @@ interface ReservationBlockProps {
 export function ReservationBlock({ reservation, roomName }: ReservationBlockProps) {
   const [isActive, setIsActive] = useState(false);
 
+  // todo: css 로 바꾸기
   const left = (timeToMinutes(reservation.start) / TOTAL_MINUTES) * 100;
   const width = ((timeToMinutes(reservation.end) - timeToMinutes(reservation.start)) / TOTAL_MINUTES) * 100;
 

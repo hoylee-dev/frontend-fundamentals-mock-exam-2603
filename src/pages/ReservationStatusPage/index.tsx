@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { css } from '@emotion/react';
 import { Top, Spacing, Border, Text, Button } from '_tosslib/components';
 import { colors } from '_tosslib/constants/colors';
@@ -9,6 +9,7 @@ import { DateSelector } from './DateSelector';
 import { Timeline } from './Timeline';
 import { StatusMessage } from './StatusMessage';
 import { MyReservationList } from './MyReservationList';
+import { MessageBanner } from 'pages/shared/MessageBanner';
 
 export type Message = { type: 'success' | 'error'; text: string };
 
@@ -16,6 +17,7 @@ export function ReservationStatusPage() {
   const [date, setDate] = useState(() => formatDate(new Date()));
   const [message, setMessage] = useState<Message | null>(null);
   const navigate = useNavigate();
+  useLocationMessage(setMessage);
 
   return (
     <div
@@ -60,7 +62,7 @@ export function ReservationStatusPage() {
       <Spacing size={24} />
 
       <div css={sectionPadding}>
-        <StatusMessage message={message} setMessage={setMessage} />
+        {message && <MessageBanner type={message.type} text={message.text} />}
         <Spacing size={12} />
       </div>
 
@@ -80,4 +82,16 @@ export function ReservationStatusPage() {
       <Spacing size={24} />
     </div>
   );
+}
+
+function useLocationMessage(setMessage: (message: Message | null) => void) {
+  const location = useLocation();
+  const locationState = location.state as { message?: string } | null; // todo: 전역 ts
+
+  useEffect(() => {
+    if (locationState?.message) {
+      setMessage({ type: 'success', text: locationState.message });
+      window.history.replaceState({}, '');
+    }
+  }, [locationState, setMessage]);
 }

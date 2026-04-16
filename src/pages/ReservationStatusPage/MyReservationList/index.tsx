@@ -14,6 +14,7 @@ interface MyReservationListProps {
   setMessage: (message: Message | null) => void;
 }
 
+// MyReservationList가 setMessage를 받는다? message, setMessage 정도는 context api 쓰는게 낫나?
 export function MyReservationList({ setMessage }: MyReservationListProps) {
   return (
     <div>
