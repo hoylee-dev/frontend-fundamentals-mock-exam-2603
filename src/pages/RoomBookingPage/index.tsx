@@ -32,41 +32,45 @@ export function RoomBookingPage() {
   const [equipment] = useEquipmentParam();
 
   const { validationError, isFilterValid } = useValidation();
-  const { mutateAsync: createReservation, isPending: isLoading } = useCreateReservationMutation();
+  const { mutate: createReservation, isPending: isLoading } = useCreateReservationMutation();
 
-  const handleBook = async () => {
+  const handleBook = () => {
     if (!selectedRoomId) {
       setErrorMessage('회의실을 선택해주세요.');
       return;
     }
 
-    try {
-      const result = await createReservation({
+    createReservation(
+      {
         roomId: selectedRoomId,
         date,
         start: startTime,
         end: endTime,
         attendees,
         equipment,
-      });
+      },
+      {
+        onSuccess: result => {
+          if ('ok' in result && result.ok) {
+            navigate('/', { state: { message: '예약이 완료되었습니다!' } });
+            return;
+          }
 
-      if ('ok' in result && result.ok) {
-        navigate('/', { state: { message: '예약이 완료되었습니다!' } });
-        return;
+          setErrorMessage(result.message ?? '예약에 실패했습니다.');
+          setSelectedRoomId(null);
+        },
+        onError: (err: unknown) => {
+          let message = '예약에 실패했습니다.';
+          if (axios.isAxiosError(err)) {
+            const data = err.response?.data as { message?: string } | undefined;
+            message = data?.message ?? message;
+          }
+
+          setErrorMessage(message);
+          setSelectedRoomId(null);
+        },
       }
-
-      setErrorMessage(result.message ?? '예약에 실패했습니다.');
-      setSelectedRoomId(null);
-    } catch (err: unknown) {
-      let message = '예약에 실패했습니다.';
-      if (axios.isAxiosError(err)) {
-        const data = err.response?.data as { message?: string } | undefined;
-        message = data?.message ?? message;
-      }
-
-      setErrorMessage(message);
-      setSelectedRoomId(null);
-    }
+    );
   };
 
   return (
