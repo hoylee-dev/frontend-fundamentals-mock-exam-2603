@@ -1,7 +1,8 @@
 import { css } from '@emotion/react';
 import { Suspense, useState, useEffect, useRef } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import axios from 'axios';
 import { Top, Spacing, Border, Text } from '_tosslib/components';
 import { colors } from '_tosslib/constants/colors';
 import { sectionPadding } from 'pages/shared/styles';
@@ -12,13 +13,61 @@ import { AvailableRoomList, ConfirmButton } from './AvailableRoomList';
 import { useValidation } from './useValidation';
 import { useBookRoom } from './AvailableRoomList/useBookRoom';
 import { MessageBanner } from 'pages/shared/MessageBanner';
+import {
+  useDateParam,
+  useStartTimeParam,
+  useEndTimeParam,
+  useAttendeesParam,
+  useEquipmentParam,
+} from './useFilterParams';
 
 export function RoomBookingPage() {
+  const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useResetOnFilterChange<string | null>(null);
   const [selectedRoomId, setSelectedRoomId] = useState<string | null>(null);
+  const [date] = useDateParam();
+  const [startTime] = useStartTimeParam();
+  const [endTime] = useEndTimeParam();
+  const [attendees] = useAttendeesParam();
+  const [equipment] = useEquipmentParam();
 
   const { validationError, isFilterValid } = useValidation();
-  const { handleBook, isLoading } = useBookRoom({ selectedRoomId, setSelectedRoomId, setErrorMessage });
+  const { mutateAsync: bookRoom, isPending: isLoading } = useBookRoom();
+
+  const handleBook = async () => {
+    if (!selectedRoomId) {
+      setErrorMessage('회의실을 선택해주세요.');
+      return;
+    }
+
+    try {
+      const result = await bookRoom({
+        roomId: selectedRoomId,
+        date,
+        start: startTime,
+        end: endTime,
+        attendees,
+        equipment,
+      });
+
+      if ('ok' in result && result.ok) {
+        navigate('/', { state: { message: '예약이 완료되었습니다!' } });
+        return;
+      }
+
+      setErrorMessage(result.message ?? '예약에 실패했습니다.');
+      setSelectedRoomId(null);
+    } catch (err: unknown) {
+      let message = '예약에 실패했습니다.';
+      if (axios.isAxiosError(err)) {
+        const data = err.response?.data as { message?: string } | undefined;
+        message = data?.message ?? message;
+      }
+
+      setErrorMessage(message);
+      setSelectedRoomId(null);
+    }
+  };
 
   return (
     <div

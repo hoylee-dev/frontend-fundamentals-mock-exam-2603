@@ -1,76 +1,25 @@
-import { useNavigate } from 'react-router-dom';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createReservation } from 'pages/shared/remotes';
 import { reservationKeys, myReservationKeys } from 'pages/shared/queryKeys';
-import axios from 'axios';
-import {
-  useDateParam,
-  useStartTimeParam,
-  useEndTimeParam,
-  useAttendeesParam,
-  useEquipmentParam,
-} from '../useFilterParams';
+import { Equipment } from 'pages/shared/types';
 
-interface UseBookRoomParams {
-  selectedRoomId: string | null;
-  setSelectedRoomId: (id: string | null) => void;
-  setErrorMessage: (message: string | null) => void;
+interface BookRoomInput {
+  roomId: string;
+  date: string;
+  start: string;
+  end: string;
+  attendees: number;
+  equipment: Equipment[];
 }
 
-export function useBookRoom({ selectedRoomId, setSelectedRoomId, setErrorMessage }: UseBookRoomParams) {
-  const navigate = useNavigate();
+export function useBookRoom() {
   const queryClient = useQueryClient();
-  const [date] = useDateParam();
-  const [startTime] = useStartTimeParam();
-  const [endTime] = useEndTimeParam();
-  const [attendees] = useAttendeesParam();
-  const [equipment] = useEquipmentParam();
 
-  const createMutation = useMutation(
-    (data: { roomId: string; date: string; start: string; end: string; attendees: number; equipment: string[] }) =>
-      createReservation(data),
-    {
-      onSuccess: (_data, variables) => {
-        queryClient.invalidateQueries({ queryKey: reservationKeys.byDate(variables.date) });
-        queryClient.invalidateQueries({ queryKey: myReservationKeys.all });
-      },
-    }
-  );
-
-  const handleBook = async () => {
-    if (!selectedRoomId) {
-      setErrorMessage('회의실을 선택해주세요.');
-      return;
-    }
-
-    try {
-      const result = await createMutation.mutateAsync({
-        roomId: selectedRoomId,
-        date,
-        start: startTime,
-        end: endTime,
-        attendees,
-        equipment,
-      });
-
-      if ('ok' in result && result.ok) {
-        navigate('/', { state: { message: '예약이 완료되었습니다!' } });
-        return;
-      }
-
-      const errResult = result as { message?: string };
-      setErrorMessage(errResult.message ?? '예약에 실패했습니다.');
-      setSelectedRoomId(null);
-    } catch (err: unknown) {
-      let serverMessage = '예약에 실패했습니다.';
-      if (axios.isAxiosError(err)) {
-        const data = err.response?.data as { message?: string } | undefined;
-        serverMessage = data?.message ?? serverMessage;
-      }
-      setErrorMessage(serverMessage);
-      setSelectedRoomId(null);
-    }
-  };
-
-  return { handleBook, isLoading: createMutation.isPending };
+  return useMutation({
+    mutationFn: (data: BookRoomInput) => createReservation(data),
+    onSuccess: (_data, variables) => {
+      queryClient.invalidateQueries({ queryKey: reservationKeys.byDate(variables.date) });
+      queryClient.invalidateQueries({ queryKey: myReservationKeys.all });
+    },
+  });
 }
