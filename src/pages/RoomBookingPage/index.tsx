@@ -2,17 +2,18 @@ import { css } from '@emotion/react';
 import { Suspense, useState, useEffect, useRef } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import { Top, Spacing, Border, Text } from '_tosslib/components';
 import { colors } from '_tosslib/constants/colors';
 import { sectionPadding } from 'pages/shared/styles';
+import { createReservationMutation } from 'pages/shared/queries';
+import { MessageBanner } from 'pages/shared/MessageBanner';
 import { BackButton } from './BackButton';
 import { BookingFilters } from './BookingFilters';
 import { InlineError } from './InlineError';
 import { AvailableRoomList, ConfirmButton } from './AvailableRoomList';
 import { useValidation } from './useValidation';
-import { useCreateReservationMutation } from './AvailableRoomList/useCreateReservationMutation';
-import { MessageBanner } from 'pages/shared/MessageBanner';
 import {
   useDateParam,
   useStartTimeParam,
@@ -31,8 +32,9 @@ export function RoomBookingPage() {
   const [attendees] = useAttendeesParam();
   const [equipment] = useEquipmentParam();
 
+  const queryClient = useQueryClient();
   const { validationError, isFilterValid } = useValidation();
-  const { mutate: createReservation, isPending: isLoading } = useCreateReservationMutation();
+  const { mutate: createReservation, isPending: isLoading } = useMutation(createReservationMutation(queryClient));
 
   const handleBook = () => {
     if (!selectedRoomId) {

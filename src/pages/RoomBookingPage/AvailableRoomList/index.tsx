@@ -1,7 +1,17 @@
 import { css } from '@emotion/react';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { Spacing, Text } from '_tosslib/components';
 import { colors } from '_tosslib/constants/colors';
-import { useAvailableRooms } from './useAvailableRooms';
+import { Room, Reservation, Equipment } from 'pages/shared/types';
+import { roomsQuery, reservationsQuery } from 'pages/shared/queries';
+import {
+  useDateParam,
+  useStartTimeParam,
+  useEndTimeParam,
+  useAttendeesParam,
+  useEquipmentParam,
+  usePreferredFloorParam,
+} from '../useFilterParams';
 import { RoomCard } from './RoomCard';
 
 export { ConfirmButton } from './ConfirmButton';
@@ -12,7 +22,24 @@ interface AvailableRoomListProps {
 }
 
 export function AvailableRoomList({ selectedRoomId, onSelectRoom }: AvailableRoomListProps) {
-  const { availableRooms } = useAvailableRooms();
+  const [date] = useDateParam();
+  const [startTime] = useStartTimeParam();
+  const [endTime] = useEndTimeParam();
+  const [attendees] = useAttendeesParam();
+  const [equipment] = useEquipmentParam();
+  const [preferredFloor] = usePreferredFloorParam();
+
+  const { data: rooms } = useSuspenseQuery(roomsQuery());
+  const { data: reservations } = useSuspenseQuery(reservationsQuery(date));
+
+  const availableRooms = filterAndSortRooms(rooms, reservations, {
+    date,
+    startTime,
+    endTime,
+    attendees,
+    equipment,
+    preferredFloor,
+  });
 
   return (
     <div>
@@ -63,4 +90,41 @@ export function AvailableRoomList({ selectedRoomId, onSelectRoom }: AvailableRoo
       )}
     </div>
   );
+}
+
+function filterAndSortRooms(
+  rooms: Room[],
+  reservations: Reservation[],
+  {
+    date,
+    startTime,
+    endTime,
+    attendees,
+    equipment,
+    preferredFloor,
+  }: {
+    date: string;
+    startTime: string;
+    endTime: string;
+    attendees: number;
+    equipment: Equipment[];
+    preferredFloor: number | null;
+  }
+): Room[] {
+  return rooms
+    .filter(room => {
+      const meetsCapacity = room.capacity >= attendees;
+      const hasRequiredEquipment = equipment.every(eq => room.equipment.includes(eq));
+      const isOnPreferredFloor = preferredFloor === null || room.floor === preferredFloor;
+      const hasNoTimeConflict = !reservations.some(
+        r => r.roomId === room.id && r.date === date && r.start < endTime && r.end > startTime
+      );
+      return meetsCapacity && hasRequiredEquipment && isOnPreferredFloor && hasNoTimeConflict;
+    })
+    .sort((a, b) => {
+      if (a.floor !== b.floor) {
+        return a.floor - b.floor;
+      }
+      return a.name.localeCompare(b.name);
+    });
 }

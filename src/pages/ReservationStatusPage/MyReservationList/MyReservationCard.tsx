@@ -1,11 +1,11 @@
 import { css } from '@emotion/react';
+import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import { Button, ListRow } from '_tosslib/components';
 import { colors } from '_tosslib/constants/colors';
 import { EQUIPMENT_LABELS } from 'pages/shared/constants';
+import { roomsQuery, cancelReservationMutation } from 'pages/shared/queries';
 import { Reservation } from 'pages/shared/types';
-import { useRoomsSuspenseQuery } from 'pages/shared/useRoomsQuery';
 import { Message } from '../index';
-import { useCancelReservation } from './useCancelReservation';
 
 interface MyReservationCardProps {
   reservation: Reservation;
@@ -13,8 +13,9 @@ interface MyReservationCardProps {
 }
 
 export function MyReservationCard({ reservation, setMessage }: MyReservationCardProps) {
-  const { handleCancelReservation } = useCancelReservation();
-  const { data: rooms } = useRoomsSuspenseQuery();
+  const queryClient = useQueryClient();
+  const { mutateAsync: cancelReservation } = useMutation(cancelReservationMutation(queryClient));
+  const { data: rooms } = useSuspenseQuery(roomsQuery());
   const roomName = rooms.find(r => r.id === reservation.roomId)?.name ?? reservation.roomId;
 
   return (
@@ -48,7 +49,7 @@ export function MyReservationCard({ reservation, setMessage }: MyReservationCard
                 if (!window.confirm('정말 취소하시겠습니까?')) {
                   return;
                 }
-                await handleCancelReservation(reservation.id);
+                await cancelReservation(reservation.id);
                 setMessage({ type: 'success', text: '예약이 취소되었습니다.' });
               } catch {
                 setMessage({ type: 'error', text: '취소에 실패했습니다.' });

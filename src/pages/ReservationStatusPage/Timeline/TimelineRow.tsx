@@ -3,8 +3,7 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 import { Text } from '_tosslib/components';
 import { colors } from '_tosslib/constants/colors';
 import { Room } from 'pages/shared/types';
-import { getReservations } from 'pages/shared/remotes';
-import { reservationKeys } from 'pages/shared/queryKeys';
+import { reservationsQuery } from 'pages/shared/queries';
 import { ReservationBlock } from './ReservationBlock';
 
 interface TimelineRowProps {
@@ -14,8 +13,7 @@ interface TimelineRowProps {
 
 export function TimelineRow({ room, date }: TimelineRowProps) {
   const { data: roomReservations } = useSuspenseQuery({
-    queryKey: reservationKeys.byDate(date),
-    queryFn: () => getReservations(date),
+    ...reservationsQuery(date),
     select: reservations => reservations.filter(r => r.roomId === room.id),
   });
 

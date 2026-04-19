@@ -1,11 +1,13 @@
-import { css } from '@emotion/react';
 import { Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
+import { css } from '@emotion/react';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { Spacing, Text } from '_tosslib/components';
 import { colors } from '_tosslib/constants/colors';
 import { formatDate } from 'pages/shared/utils';
 import { TIME_SLOTS, EQUIPMENT_LABELS } from 'pages/shared/constants';
 import { Equipment } from 'pages/shared/types';
+import { roomsQuery } from 'pages/shared/queries';
 import {
   useDateParam,
   useStartTimeParam,
@@ -14,7 +16,6 @@ import {
   useEquipmentParam,
   usePreferredFloorParam,
 } from '../useFilterParams';
-import { useRoomsSuspenseQuery } from 'pages/shared/useRoomsQuery';
 import { DateFilter } from './DateFilter';
 import { TimeSelect } from './TimeSelect';
 import { AttendeeInput } from './AttendeeInput';
@@ -61,7 +62,6 @@ export function BookingFilters() {
         <AttendeeInput label="참석 인원" value={attendees} min={1} onChange={setAttendees} />
         <ErrorBoundary fallback={<FloorSelectErrorFallback />}>
           <Suspense fallback={<FloorSelectFallback />}>
-            {/* todo: react 18 버전 업 & suspensive 적용 */}
             <FloorSelectWithData />
           </Suspense>
         </ErrorBoundary>
@@ -83,7 +83,7 @@ export function BookingFilters() {
 }
 
 function FloorSelectWithData() {
-  const { data: rooms } = useRoomsSuspenseQuery();
+  const { data: rooms } = useSuspenseQuery(roomsQuery());
   const floors = [...new Set(rooms.map(r => r.floor))].sort((a, b) => a - b);
   const [preferredFloor, setPreferredFloor] = usePreferredFloorParam();
 

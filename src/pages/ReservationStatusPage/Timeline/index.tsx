@@ -1,9 +1,10 @@
 import { Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { css } from '@emotion/react';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { Text } from '_tosslib/components';
 import { colors } from '_tosslib/constants/colors';
-import { useRoomsSuspenseQuery } from 'pages/shared/useRoomsQuery';
+import { roomsQuery } from 'pages/shared/queries';
 import { TimelineHeader } from './TimelineHeader';
 import { TimelineRow } from './TimelineRow';
 
@@ -21,7 +22,6 @@ export function Timeline({ date }: TimelineProps) {
       `}
     >
       <TimelineHeader />
-      {/* todo: suspensive */}
       <ErrorBoundary fallback={<TimelineBodyErrorFallback />}>
         <Suspense fallback={<TimelineBodyFallback />}>
           <TimelineBody date={date} />
@@ -31,10 +31,8 @@ export function Timeline({ date }: TimelineProps) {
   );
 }
 
-// TimelineHeader는 추상화. TimelineBody는 파일내 위치시켰음.
-
 function TimelineBody({ date }: { date: string }) {
-  const { data: rooms } = useRoomsSuspenseQuery();
+  const { data: rooms } = useSuspenseQuery(roomsQuery());
 
   return (
     <div

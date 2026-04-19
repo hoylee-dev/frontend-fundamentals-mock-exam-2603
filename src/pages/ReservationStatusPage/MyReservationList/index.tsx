@@ -4,8 +4,7 @@ import { css } from '@emotion/react';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { Spacing, Text } from '_tosslib/components';
 import { colors } from '_tosslib/constants/colors';
-import { getMyReservations } from 'pages/shared/remotes';
-import { myReservationKeys } from 'pages/shared/queryKeys';
+import { myReservationsQuery } from 'pages/shared/queries';
 import { Message } from '../index';
 import { MyReservationHeader } from './MyReservationHeader';
 import { MyReservationCard } from './MyReservationCard';
@@ -14,7 +13,6 @@ interface MyReservationListProps {
   setMessage: (message: Message | null) => void;
 }
 
-// MyReservationList가 setMessage를 받는다? message, setMessage 정도는 context api 쓰는게 낫나?
 export function MyReservationList({ setMessage }: MyReservationListProps) {
   return (
     <div>
@@ -24,7 +22,6 @@ export function MyReservationList({ setMessage }: MyReservationListProps) {
         </Suspense>
       </ErrorBoundary>
       <Spacing size={16} />
-      {/* todo: suspensive */}
       <ErrorBoundary fallback={<MyReservationErrorFallback />}>
         <Suspense fallback={<MyReservationContentFallback />}>
           <MyReservationContent setMessage={setMessage} />
@@ -35,10 +32,7 @@ export function MyReservationList({ setMessage }: MyReservationListProps) {
 }
 
 function MyReservationContent({ setMessage }: { setMessage: (message: Message | null) => void }) {
-  const { data: myReservations } = useSuspenseQuery({
-    queryKey: myReservationKeys.all,
-    queryFn: getMyReservations,
-  });
+  const { data: myReservations } = useSuspenseQuery(myReservationsQuery());
 
   if (myReservations.length === 0) {
     return (

@@ -1,12 +1,6 @@
-export const roomKeys = {
-  all: ['rooms'] as const,
-};
-
-export const reservationKeys = {
-  all: ['reservations'] as const,
-  byDate: (date: string) => [...reservationKeys.all, date] as const,
-};
-
-export const myReservationKeys = {
-  all: ['myReservations'] as const,
+export const queryKeys = {
+  rooms: () => ['rooms'] as const,
+  reservations: () => ['reservations'] as const,
+  reservationsByDate: (date: string) => ['reservations', date] as const,
+  myReservations: () => ['myReservations'] as const,
 };
