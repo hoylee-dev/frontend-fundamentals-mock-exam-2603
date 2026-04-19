@@ -3,9 +3,8 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { css } from '@emotion/react';
 import { Top, Spacing, Border, Text, Button } from '_tosslib/components';
 import { colors } from '_tosslib/constants/colors';
-import { sectionPadding } from 'pages/shared/styles';
+import { sectionPadding, dateInputStyle } from 'pages/shared/styles';
 import { formatDate } from 'pages/shared/utils';
-import { DateSelector } from './DateSelector';
 import { Timeline } from './Timeline';
 import { StatusMessage } from './StatusMessage';
 import { MyReservationList } from './MyReservationList';
@@ -81,6 +80,29 @@ export function ReservationStatusPage() {
       </div>
       <Spacing size={24} />
     </div>
+  );
+}
+
+function DateSelector({
+  label,
+  value,
+  min,
+  onChange,
+}: {
+  label: string;
+  value: string;
+  min: string;
+  onChange: (value: string) => void;
+}) {
+  return (
+    <input
+      type="date"
+      value={value}
+      min={min}
+      onChange={e => onChange(e.target.value)}
+      aria-label={label}
+      css={dateInputStyle}
+    />
   );
 }
 
