@@ -1,6 +1,6 @@
 import { queryOptions, mutationOptions, QueryClient } from '@tanstack/react-query';
 import { queryKeys } from './queryKeys';
-import { getRooms, getReservations, getMyReservations, createReservation, cancelReservation } from './remotes';
+import { getRooms, getReservations, getMyReservations, createReservation, cancelReservation } from '../api/remotes';
 
 // Queries
 export const roomsQuery = () => queryOptions({ queryKey: queryKeys.rooms(), queryFn: getRooms });

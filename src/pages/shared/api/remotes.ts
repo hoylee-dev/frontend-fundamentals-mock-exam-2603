@@ -1,5 +1,5 @@
 import { http } from './http';
-import { Room, Reservation } from './types';
+import { Room, Reservation } from '../types';
 
 export function getRooms() {
   return http.get<Room[]>('/api/rooms');

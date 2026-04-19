@@ -5,11 +5,11 @@ import { SuspenseQuery } from '@suspensive/react-query';
 import { Spacing, Text, Button, ListRow } from '_tosslib/components';
 import { colors } from '_tosslib/constants/colors';
 import { EQUIPMENT_LABELS } from 'pages/shared/constants';
-import { myReservationsQuery, roomsQuery, cancelReservationMutation } from 'pages/shared/queries';
+import { myReservationsQuery, roomsQuery, cancelReservationMutation } from 'pages/shared/queries/queries';
 import { Reservation } from 'pages/shared/types';
-import { QueryErrorBoundary } from 'pages/shared/QueryErrorBoundary';
-import { SuspenseFallback } from 'pages/shared/SuspenseFallback';
-import { ErrorFallback } from 'pages/shared/ErrorFallback';
+import { QueryErrorBoundary } from 'pages/shared/ui/QueryErrorBoundary';
+import { SuspenseFallback } from 'pages/shared/ui/SuspenseFallback';
+import { ErrorFallback } from 'pages/shared/ui/ErrorFallback';
 import { Message } from '../index';
 
 interface MyReservationListProps {

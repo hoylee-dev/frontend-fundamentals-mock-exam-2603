@@ -4,10 +4,10 @@ import { SuspenseQuery } from '@suspensive/react-query';
 import { Text } from '_tosslib/components';
 import { colors } from '_tosslib/constants/colors';
 import { Room } from 'pages/shared/types';
-import { roomsQuery, reservationsQuery } from 'pages/shared/queries';
-import { QueryErrorBoundary } from 'pages/shared/QueryErrorBoundary';
-import { SuspenseFallback } from 'pages/shared/SuspenseFallback';
-import { ErrorFallback } from 'pages/shared/ErrorFallback';
+import { roomsQuery, reservationsQuery } from 'pages/shared/queries/queries';
+import { QueryErrorBoundary } from 'pages/shared/ui/QueryErrorBoundary';
+import { SuspenseFallback } from 'pages/shared/ui/SuspenseFallback';
+import { ErrorFallback } from 'pages/shared/ui/ErrorFallback';
 import { TimelineHeader } from './TimelineHeader';
 import { ReservationBlock } from './ReservationBlock';
 

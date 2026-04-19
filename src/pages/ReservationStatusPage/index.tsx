@@ -7,7 +7,7 @@ import { sectionPadding, dateInputStyle } from 'pages/shared/styles';
 import { formatDate } from 'pages/shared/utils';
 import { Timeline } from './Timeline';
 import { MyReservationList } from './MyReservationList';
-import { MessageBanner } from 'pages/shared/MessageBanner';
+import { MessageBanner } from 'pages/shared/ui/MessageBanner';
 
 export type Message = { type: 'success' | 'error'; text: string };
 

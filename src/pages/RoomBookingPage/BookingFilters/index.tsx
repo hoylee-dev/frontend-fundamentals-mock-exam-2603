@@ -6,9 +6,9 @@ import { colors } from '_tosslib/constants/colors';
 import { formatDate } from 'pages/shared/utils';
 import { TIME_SLOTS, EQUIPMENT_LABELS } from 'pages/shared/constants';
 import { Equipment } from 'pages/shared/types';
-import { roomsQuery } from 'pages/shared/queries';
-import { QueryErrorBoundary } from 'pages/shared/QueryErrorBoundary';
-import { ErrorFallback } from 'pages/shared/ErrorFallback';
+import { roomsQuery } from 'pages/shared/queries/queries';
+import { QueryErrorBoundary } from 'pages/shared/ui/QueryErrorBoundary';
+import { ErrorFallback } from 'pages/shared/ui/ErrorFallback';
 import {
   useDateParam,
   useStartTimeParam,

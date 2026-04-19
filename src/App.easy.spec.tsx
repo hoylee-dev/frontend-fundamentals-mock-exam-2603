@@ -4,7 +4,7 @@ import { NuqsAdapter } from 'nuqs/adapters/react-router/v6';
 import userEvent from '@testing-library/user-event';
 import { describe, test, expect, afterEach, vi } from 'vitest';
 import App from './App';
-import * as remotes from 'pages/shared/remotes';
+import * as remotes from 'pages/shared/api/remotes';
 
 describe('예약 현황 페이지', () => {
   afterEach(() => {
