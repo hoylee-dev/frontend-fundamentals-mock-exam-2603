@@ -8,6 +8,7 @@ import { TIME_SLOTS, EQUIPMENT_LABELS } from 'pages/shared/constants';
 import { Equipment } from 'pages/shared/types';
 import { roomsQuery } from 'pages/shared/queries';
 import { QueryErrorBoundary } from 'pages/shared/QueryErrorBoundary';
+import { ErrorFallback } from 'pages/shared/ErrorFallback';
 import {
   useDateParam,
   useStartTimeParam,
@@ -61,7 +62,7 @@ export function BookingFilters() {
         `}
       >
         <AttendeeInput label="참석 인원" value={attendees} min={1} onChange={setAttendees} />
-        <QueryErrorBoundary fallback={<FloorSelectErrorFallback />}>
+        <QueryErrorBoundary FallbackComponent={ErrorFallback}>
           <Suspense fallback={<FloorSelectFallback />}>
             <SuspenseQuery
               {...roomsQuery()}
@@ -100,22 +101,5 @@ function FloorSelectFallback() {
         flex: 1;
       `}
     />
-  );
-}
-
-function FloorSelectErrorFallback() {
-  return (
-    <div
-      css={css`
-        display: flex;
-        flex-direction: column;
-        gap: 6px;
-        flex: 1;
-      `}
-    >
-      <Text typography="t7" color={colors.grey400}>
-        층 정보를 불러오지 못했습니다.
-      </Text>
-    </div>
   );
 }

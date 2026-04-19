@@ -8,6 +8,8 @@ import { EQUIPMENT_LABELS } from 'pages/shared/constants';
 import { myReservationsQuery, roomsQuery, cancelReservationMutation } from 'pages/shared/queries';
 import { Reservation } from 'pages/shared/types';
 import { QueryErrorBoundary } from 'pages/shared/QueryErrorBoundary';
+import { SuspenseFallback } from 'pages/shared/SuspenseFallback';
+import { ErrorFallback } from 'pages/shared/ErrorFallback';
 import { Message } from '../index';
 
 interface MyReservationListProps {
@@ -45,8 +47,8 @@ export function MyReservationList({ setMessage }: MyReservationListProps) {
         </QueryErrorBoundary>
       </div>
       <Spacing size={16} />
-      <QueryErrorBoundary fallback={<MyReservationErrorFallback />}>
-        <Suspense fallback={<MyReservationContentFallback />}>
+      <QueryErrorBoundary FallbackComponent={ErrorFallback}>
+        <Suspense fallback={<SuspenseFallback />}>
           <SuspenseQuery {...myReservationsQuery()}>
             {({ data: myReservations }) => {
               if (myReservations.length === 0) {
@@ -153,39 +155,5 @@ function ReservationCard({
         </div>
       )}
     </SuspenseQuery>
-  );
-}
-
-function MyReservationContentFallback() {
-  return (
-    <div
-      css={css`
-        padding: 40px 0;
-        text-align: center;
-        background: ${colors.grey50};
-        border-radius: 14px;
-      `}
-    >
-      <Text typography="t6" color={colors.grey400}>
-        로딩 중...
-      </Text>
-    </div>
-  );
-}
-
-function MyReservationErrorFallback() {
-  return (
-    <div
-      css={css`
-        padding: 40px 0;
-        text-align: center;
-        background: ${colors.grey50};
-        border-radius: 14px;
-      `}
-    >
-      <Text typography="t6" color={colors.grey400}>
-        데이터를 불러오지 못했습니다.
-      </Text>
-    </div>
   );
 }

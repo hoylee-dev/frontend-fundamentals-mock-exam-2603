@@ -8,6 +8,8 @@ import { colors } from '_tosslib/constants/colors';
 import { sectionPadding } from 'pages/shared/styles';
 import { createReservationMutation } from 'pages/shared/queries';
 import { QueryErrorBoundary } from 'pages/shared/QueryErrorBoundary';
+import { SuspenseFallback } from 'pages/shared/SuspenseFallback';
+import { ErrorFallback } from 'pages/shared/ErrorFallback';
 import { MessageBanner } from 'pages/shared/MessageBanner';
 import { BackButton } from './BackButton';
 import { BookingFilters } from './BookingFilters';
@@ -123,8 +125,8 @@ export function RoomBookingPage() {
           <Text typography="t5" fontWeight="bold" color={colors.grey900}>
             예약 가능 회의실
           </Text>
-          <QueryErrorBoundary fallback={<AvailableRoomListErrorFallback />}>
-            <Suspense fallback={<AvailableRoomListFallback />}>
+          <QueryErrorBoundary FallbackComponent={ErrorFallback}>
+            <Suspense fallback={<SuspenseFallback />}>
               <AvailableRoomList selectedRoomId={selectedRoomId} onSelectRoom={setSelectedRoomId} />
             </Suspense>
           </QueryErrorBoundary>
@@ -153,38 +155,4 @@ function useResetOnFilterChange<T>(initialValue: T): [T, (value: T) => void] {
   }, [search, initialValue]);
 
   return [value, setValue];
-}
-
-function AvailableRoomListFallback() {
-  return (
-    <div
-      css={css`
-        height: 200px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      `}
-    >
-      <Text typography="t7" color={colors.grey400}>
-        로딩 중...
-      </Text>
-    </div>
-  );
-}
-
-function AvailableRoomListErrorFallback() {
-  return (
-    <div
-      css={css`
-        height: 200px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      `}
-    >
-      <Text typography="t7" color={colors.grey400}>
-        회의실 목록을 불러오지 못했습니다.
-      </Text>
-    </div>
-  );
 }

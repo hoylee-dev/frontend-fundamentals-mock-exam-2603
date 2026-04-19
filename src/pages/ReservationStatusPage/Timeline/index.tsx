@@ -6,6 +6,8 @@ import { colors } from '_tosslib/constants/colors';
 import { Room } from 'pages/shared/types';
 import { roomsQuery, reservationsQuery } from 'pages/shared/queries';
 import { QueryErrorBoundary } from 'pages/shared/QueryErrorBoundary';
+import { SuspenseFallback } from 'pages/shared/SuspenseFallback';
+import { ErrorFallback } from 'pages/shared/ErrorFallback';
 import { TimelineHeader } from './TimelineHeader';
 import { ReservationBlock } from './ReservationBlock';
 
@@ -23,8 +25,8 @@ export function Timeline({ date }: TimelineProps) {
       `}
     >
       <TimelineHeader />
-      <QueryErrorBoundary fallback={<TimelineBodyErrorFallback />}>
-        <Suspense fallback={<TimelineBodyFallback />}>
+      <QueryErrorBoundary FallbackComponent={ErrorFallback}>
+        <Suspense fallback={<SuspenseFallback />}>
           <SuspenseQuery {...roomsQuery()}>
             {({ data: rooms }) => (
               <div
@@ -93,40 +95,6 @@ function TimelineRow({ room, date }: { room: Room; date: string }) {
           }
         </SuspenseQuery>
       </div>
-    </div>
-  );
-}
-
-function TimelineBodyFallback() {
-  return (
-    <div
-      css={css`
-        height: 280px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      `}
-    >
-      <Text typography="t7" color={colors.grey400}>
-        로딩 중...
-      </Text>
-    </div>
-  );
-}
-
-function TimelineBodyErrorFallback() {
-  return (
-    <div
-      css={css`
-        height: 280px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      `}
-    >
-      <Text typography="t7" color={colors.grey400}>
-        데이터를 불러오지 못했습니다.
-      </Text>
     </div>
   );
 }
