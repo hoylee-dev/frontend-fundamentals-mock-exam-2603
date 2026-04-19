@@ -6,7 +6,6 @@ import { colors } from '_tosslib/constants/colors';
 import { sectionPadding, dateInputStyle } from 'pages/shared/styles';
 import { formatDate } from 'pages/shared/utils';
 import { Timeline } from './Timeline';
-import { StatusMessage } from './StatusMessage';
 import { MyReservationList } from './MyReservationList';
 import { MessageBanner } from 'pages/shared/MessageBanner';
 
