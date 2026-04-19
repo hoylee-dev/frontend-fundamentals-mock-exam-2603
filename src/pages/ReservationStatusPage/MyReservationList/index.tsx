@@ -1,10 +1,10 @@
 import { Suspense } from 'react';
-import { ErrorBoundary } from 'react-error-boundary';
 import { css } from '@emotion/react';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { Spacing, Text } from '_tosslib/components';
 import { colors } from '_tosslib/constants/colors';
 import { myReservationsQuery } from 'pages/shared/queries';
+import { QueryErrorBoundary } from 'pages/shared/QueryErrorBoundary';
 import { Message } from '../index';
 import { MyReservationHeader } from './MyReservationHeader';
 import { MyReservationCard } from './MyReservationCard';
@@ -16,17 +16,17 @@ interface MyReservationListProps {
 export function MyReservationList({ setMessage }: MyReservationListProps) {
   return (
     <div>
-      <ErrorBoundary fallback={<MyReservationHeaderErrorFallback />}>
+      <QueryErrorBoundary fallback={<MyReservationHeaderErrorFallback />}>
         <Suspense fallback={<MyReservationHeaderFallback />}>
           <MyReservationHeader />
         </Suspense>
-      </ErrorBoundary>
+      </QueryErrorBoundary>
       <Spacing size={16} />
-      <ErrorBoundary fallback={<MyReservationErrorFallback />}>
+      <QueryErrorBoundary fallback={<MyReservationErrorFallback />}>
         <Suspense fallback={<MyReservationContentFallback />}>
           <MyReservationContent setMessage={setMessage} />
         </Suspense>
-      </ErrorBoundary>
+      </QueryErrorBoundary>
     </div>
   );
 }

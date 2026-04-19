@@ -1,6 +1,5 @@
 import { css } from '@emotion/react';
 import { Suspense, useState, useEffect, useRef } from 'react';
-import { ErrorBoundary } from 'react-error-boundary';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
@@ -8,6 +7,7 @@ import { Top, Spacing, Border, Text } from '_tosslib/components';
 import { colors } from '_tosslib/constants/colors';
 import { sectionPadding } from 'pages/shared/styles';
 import { createReservationMutation } from 'pages/shared/queries';
+import { QueryErrorBoundary } from 'pages/shared/QueryErrorBoundary';
 import { MessageBanner } from 'pages/shared/MessageBanner';
 import { BackButton } from './BackButton';
 import { BookingFilters } from './BookingFilters';
@@ -120,11 +120,11 @@ export function RoomBookingPage() {
 
       {isFilterValid && (
         <div css={sectionPadding}>
-          <ErrorBoundary fallback={<AvailableRoomListErrorFallback />}>
+          <QueryErrorBoundary fallback={<AvailableRoomListErrorFallback />}>
             <Suspense fallback={<AvailableRoomListFallback />}>
               <AvailableRoomList selectedRoomId={selectedRoomId} onSelectRoom={setSelectedRoomId} />
             </Suspense>
-          </ErrorBoundary>
+          </QueryErrorBoundary>
 
           <Spacing size={16} />
 

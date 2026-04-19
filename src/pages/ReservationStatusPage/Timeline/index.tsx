@@ -1,10 +1,10 @@
 import { Suspense } from 'react';
-import { ErrorBoundary } from 'react-error-boundary';
 import { css } from '@emotion/react';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { Text } from '_tosslib/components';
 import { colors } from '_tosslib/constants/colors';
 import { roomsQuery } from 'pages/shared/queries';
+import { QueryErrorBoundary } from 'pages/shared/QueryErrorBoundary';
 import { TimelineHeader } from './TimelineHeader';
 import { TimelineRow } from './TimelineRow';
 
@@ -22,11 +22,11 @@ export function Timeline({ date }: TimelineProps) {
       `}
     >
       <TimelineHeader />
-      <ErrorBoundary fallback={<TimelineBodyErrorFallback />}>
+      <QueryErrorBoundary fallback={<TimelineBodyErrorFallback />}>
         <Suspense fallback={<TimelineBodyFallback />}>
           <TimelineBody date={date} />
         </Suspense>
-      </ErrorBoundary>
+      </QueryErrorBoundary>
     </div>
   );
 }

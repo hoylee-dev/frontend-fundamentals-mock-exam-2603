@@ -1,5 +1,4 @@
 import { Suspense } from 'react';
-import { ErrorBoundary } from 'react-error-boundary';
 import { css } from '@emotion/react';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { Spacing, Text } from '_tosslib/components';
@@ -8,6 +7,7 @@ import { formatDate } from 'pages/shared/utils';
 import { TIME_SLOTS, EQUIPMENT_LABELS } from 'pages/shared/constants';
 import { Equipment } from 'pages/shared/types';
 import { roomsQuery } from 'pages/shared/queries';
+import { QueryErrorBoundary } from 'pages/shared/QueryErrorBoundary';
 import {
   useDateParam,
   useStartTimeParam,
@@ -60,11 +60,11 @@ export function BookingFilters() {
         `}
       >
         <AttendeeInput label="참석 인원" value={attendees} min={1} onChange={setAttendees} />
-        <ErrorBoundary fallback={<FloorSelectErrorFallback />}>
+        <QueryErrorBoundary fallback={<FloorSelectErrorFallback />}>
           <Suspense fallback={<FloorSelectFallback />}>
             <FloorSelectWithData />
           </Suspense>
-        </ErrorBoundary>
+        </QueryErrorBoundary>
       </div>
 
       <Spacing size={14} />
