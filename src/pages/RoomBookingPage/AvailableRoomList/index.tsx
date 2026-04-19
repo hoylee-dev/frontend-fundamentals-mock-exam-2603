@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { useSuspenseQuery } from '@tanstack/react-query';
+import { useSuspenseQueries } from '@tanstack/react-query';
 import { Spacing, Text } from '_tosslib/components';
 import { colors } from '_tosslib/constants/colors';
 import { Room, Reservation, Equipment } from 'pages/shared/types';
@@ -29,8 +29,9 @@ export function AvailableRoomList({ selectedRoomId, onSelectRoom }: AvailableRoo
   const [equipment] = useEquipmentParam();
   const [preferredFloor] = usePreferredFloorParam();
 
-  const { data: rooms } = useSuspenseQuery(roomsQuery());
-  const { data: reservations } = useSuspenseQuery(reservationsQuery(date));
+  const [{ data: rooms }, { data: reservations }] = useSuspenseQueries({
+    queries: [roomsQuery(), reservationsQuery(date)],
+  });
 
   const availableRooms = filterAndSortRooms(rooms, reservations, {
     date,
