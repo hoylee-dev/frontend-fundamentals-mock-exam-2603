@@ -1,5 +1,12 @@
 # 토스 Frontend Developer 면접 과제 🔥
 
+## Branches
+
+| 브랜치 | 설명 |
+|---|---|
+| `main` | 과제로 주어진 원본 코드 |
+| `refactoring` | 리팩터링 완료된 코드 |
+
 ## Getting started
 ```sh
 yarn start
