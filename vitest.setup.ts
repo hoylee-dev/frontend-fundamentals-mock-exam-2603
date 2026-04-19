@@ -43,6 +43,8 @@ beforeAll(() => {
 afterEach(() => {
   server.resetHandlers();
   resetData();
+  // nuqs가 jsdom의 URL에 남긴 search params를 초기화
+  window.history.replaceState({}, '', '/');
 });
 afterAll(() => {
   server.close();

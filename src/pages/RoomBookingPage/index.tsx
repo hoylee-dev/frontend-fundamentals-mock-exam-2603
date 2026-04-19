@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import { Suspense, useState, useEffect, useRef } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import { Top, Spacing, Border, Text } from '_tosslib/components';
@@ -143,15 +143,14 @@ export function RoomBookingPage() {
 function useResetOnFilterChange<T>(initialValue: T): [T, (value: T) => void] {
   const [value, setValue] = useState<T>(initialValue);
 
-  const [searchParams] = useSearchParams();
-  const prevParamsRef = useRef(searchParams.toString());
+  const { search } = useLocation();
+  const prevSearchRef = useRef(search);
   useEffect(() => {
-    const current = searchParams.toString();
-    if (prevParamsRef.current !== current) {
-      prevParamsRef.current = current;
+    if (prevSearchRef.current !== search) {
+      prevSearchRef.current = search;
       setValue(initialValue);
     }
-  }, [searchParams, initialValue]);
+  }, [search, initialValue]);
 
   return [value, setValue];
 }

@@ -1,5 +1,6 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
+import { NuqsAdapter } from 'nuqs/adapters/react-router/v6';
 import userEvent from '@testing-library/user-event';
 import { describe, test, expect, afterEach, vi } from 'vitest';
 import App from './App';
@@ -13,7 +14,9 @@ describe('예약 현황 페이지', () => {
   function renderApp(route = '/') {
     return render(
       <MemoryRouter initialEntries={[route]}>
-        <App />
+        <NuqsAdapter>
+          <App />
+        </NuqsAdapter>
       </MemoryRouter>
     );
   }
@@ -128,9 +131,12 @@ describe('예약하기 페이지', () => {
   });
 
   function renderApp(route = '/booking') {
+    window.history.replaceState({}, '', route);
     return render(
       <MemoryRouter initialEntries={[route]}>
-        <App />
+        <NuqsAdapter>
+          <App />
+        </NuqsAdapter>
       </MemoryRouter>
     );
   }
