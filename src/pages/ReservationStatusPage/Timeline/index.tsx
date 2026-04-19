@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 import { css } from '@emotion/react';
-import { useSuspenseQuery } from '@tanstack/react-query';
+import { SuspenseQuery } from '@suspensive/react-query';
 import { Text } from '_tosslib/components';
 import { colors } from '_tosslib/constants/colors';
 import { roomsQuery } from 'pages/shared/queries';
@@ -24,27 +24,23 @@ export function Timeline({ date }: TimelineProps) {
       <TimelineHeader />
       <QueryErrorBoundary fallback={<TimelineBodyErrorFallback />}>
         <Suspense fallback={<TimelineBodyFallback />}>
-          <TimelineBody date={date} />
+          <SuspenseQuery {...roomsQuery()}>
+            {({ data: rooms }) => (
+              <div
+                css={css`
+                  display: flex;
+                  flex-direction: column;
+                  gap: 4px;
+                `}
+              >
+                {rooms.map(room => (
+                  <TimelineRow key={room.id} room={room} date={date} />
+                ))}
+              </div>
+            )}
+          </SuspenseQuery>
         </Suspense>
       </QueryErrorBoundary>
-    </div>
-  );
-}
-
-function TimelineBody({ date }: { date: string }) {
-  const { data: rooms } = useSuspenseQuery(roomsQuery());
-
-  return (
-    <div
-      css={css`
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
-      `}
-    >
-      {rooms.map(room => (
-        <TimelineRow key={room.id} room={room} date={date} />
-      ))}
     </div>
   );
 }

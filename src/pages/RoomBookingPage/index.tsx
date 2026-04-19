@@ -120,6 +120,9 @@ export function RoomBookingPage() {
 
       {isFilterValid && (
         <div css={sectionPadding}>
+          <Text typography="t5" fontWeight="bold" color={colors.grey900}>
+            예약 가능 회의실
+          </Text>
           <QueryErrorBoundary fallback={<AvailableRoomListErrorFallback />}>
             <Suspense fallback={<AvailableRoomListFallback />}>
               <AvailableRoomList selectedRoomId={selectedRoomId} onSelectRoom={setSelectedRoomId} />

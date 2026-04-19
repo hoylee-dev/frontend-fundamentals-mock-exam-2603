@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 import { css } from '@emotion/react';
-import { useSuspenseQuery } from '@tanstack/react-query';
+import { SuspenseQuery } from '@suspensive/react-query';
 import { Spacing, Text } from '_tosslib/components';
 import { colors } from '_tosslib/constants/colors';
 import { formatDate } from 'pages/shared/utils';
@@ -28,6 +28,7 @@ export function BookingFilters() {
   const [endTime, setEndTime] = useEndTimeParam();
   const [attendees, setAttendees] = useAttendeesParam();
   const [equipment, setEquipment] = useEquipmentParam();
+  const [preferredFloor, setPreferredFloor] = usePreferredFloorParam();
 
   return (
     <div>
@@ -62,7 +63,14 @@ export function BookingFilters() {
         <AttendeeInput label="참석 인원" value={attendees} min={1} onChange={setAttendees} />
         <QueryErrorBoundary fallback={<FloorSelectErrorFallback />}>
           <Suspense fallback={<FloorSelectFallback />}>
-            <FloorSelectWithData />
+            <SuspenseQuery
+              {...roomsQuery()}
+              select={rooms => [...new Set(rooms.map(r => r.floor))].sort((a, b) => a - b)}
+            >
+              {({ data: floors }) => (
+                <FloorSelect label="선호 층" value={preferredFloor} options={floors} onChange={setPreferredFloor} />
+              )}
+            </SuspenseQuery>
           </Suspense>
         </QueryErrorBoundary>
       </div>
@@ -80,14 +88,6 @@ export function BookingFilters() {
       />
     </div>
   );
-}
-
-function FloorSelectWithData() {
-  const { data: rooms } = useSuspenseQuery(roomsQuery());
-  const floors = [...new Set(rooms.map(r => r.floor))].sort((a, b) => a - b);
-  const [preferredFloor, setPreferredFloor] = usePreferredFloorParam();
-
-  return <FloorSelect label="선호 층" value={preferredFloor} options={floors} onChange={setPreferredFloor} />;
 }
 
 function FloorSelectFallback() {

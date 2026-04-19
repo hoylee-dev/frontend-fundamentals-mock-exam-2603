@@ -2,7 +2,6 @@ import { css } from '@emotion/react';
 import { useSuspenseQueries } from '@tanstack/react-query';
 import { Spacing, Text } from '_tosslib/components';
 import { colors } from '_tosslib/constants/colors';
-import { Room, Reservation, Equipment } from 'pages/shared/types';
 import { roomsQuery, reservationsQuery } from 'pages/shared/queries';
 import {
   useDateParam,
@@ -33,35 +32,31 @@ export function AvailableRoomList({ selectedRoomId, onSelectRoom }: AvailableRoo
     queries: [roomsQuery(), reservationsQuery(date)],
   });
 
-  const availableRooms = filterAndSortRooms(rooms, reservations, {
-    date,
-    startTime,
-    endTime,
-    attendees,
-    equipment,
-    preferredFloor,
-  });
+  const availableRooms = rooms
+    .filter(room => {
+      const meetsCapacity = room.capacity >= attendees;
+      const hasRequiredEquipment = equipment.every(eq => room.equipment.includes(eq));
+      const isOnPreferredFloor = preferredFloor === null || room.floor === preferredFloor;
+      const hasNoTimeConflict = !reservations.some(
+        r => r.roomId === room.id && r.date === date && r.start < endTime && r.end > startTime
+      );
+      return meetsCapacity && hasRequiredEquipment && isOnPreferredFloor && hasNoTimeConflict;
+    })
+    .sort((a, b) => {
+      if (a.floor !== b.floor) {
+        return a.floor - b.floor;
+      }
+      return a.name.localeCompare(b.name);
+    });
 
   return (
     <div>
-      <div
-        css={css`
-          display: flex;
-          align-items: baseline;
-          gap: 6px;
-        `}
-      >
-        <Text typography="t5" fontWeight="bold" color={colors.grey900}>
-          예약 가능 회의실
-        </Text>
-        <Text typography="t7" fontWeight="medium" color={colors.grey500}>
-          {availableRooms.length}개
-        </Text>
-      </div>
+      <Text typography="t7" fontWeight="medium" color={colors.grey500}>
+        {availableRooms.length}개
+      </Text>
 
       <Spacing size={16} />
 
-      {/* todo: switch case ? */}
       {availableRooms.length === 0 && (
         <div
           css={css`
@@ -91,41 +86,4 @@ export function AvailableRoomList({ selectedRoomId, onSelectRoom }: AvailableRoo
       )}
     </div>
   );
-}
-
-function filterAndSortRooms(
-  rooms: Room[],
-  reservations: Reservation[],
-  {
-    date,
-    startTime,
-    endTime,
-    attendees,
-    equipment,
-    preferredFloor,
-  }: {
-    date: string;
-    startTime: string;
-    endTime: string;
-    attendees: number;
-    equipment: Equipment[];
-    preferredFloor: number | null;
-  }
-): Room[] {
-  return rooms
-    .filter(room => {
-      const meetsCapacity = room.capacity >= attendees;
-      const hasRequiredEquipment = equipment.every(eq => room.equipment.includes(eq));
-      const isOnPreferredFloor = preferredFloor === null || room.floor === preferredFloor;
-      const hasNoTimeConflict = !reservations.some(
-        r => r.roomId === room.id && r.date === date && r.start < endTime && r.end > startTime
-      );
-      return meetsCapacity && hasRequiredEquipment && isOnPreferredFloor && hasNoTimeConflict;
-    })
-    .sort((a, b) => {
-      if (a.floor !== b.floor) {
-        return a.floor - b.floor;
-      }
-      return a.name.localeCompare(b.name);
-    });
 }
