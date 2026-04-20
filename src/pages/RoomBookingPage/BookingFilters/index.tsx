@@ -9,14 +9,7 @@ import { Equipment } from 'pages/shared/types';
 import { roomsQuery } from 'pages/shared/queries/queries';
 import { QueryErrorBoundary } from 'pages/shared/ui/QueryErrorBoundary';
 import { ErrorFallback } from 'pages/shared/ui/ErrorFallback';
-import {
-  useDateParam,
-  useStartTimeParam,
-  useEndTimeParam,
-  useAttendeesParam,
-  useEquipmentParam,
-  usePreferredFloorParam,
-} from '../useFilterParams';
+import { useRequirementParams, usePreferenceParams } from '../useFilterParams';
 import { DateFilter } from './DateFilter';
 import { TimeSelect } from './TimeSelect';
 import { AttendeeInput } from './AttendeeInput';
@@ -24,12 +17,9 @@ import { FloorSelect } from './FloorSelect';
 import { ToggleButtonGroup } from './ToggleButtonGroup';
 
 export function BookingFilters() {
-  const [date, setDate] = useDateParam();
-  const [startTime, setStartTime] = useStartTimeParam();
-  const [endTime, setEndTime] = useEndTimeParam();
-  const [attendees, setAttendees] = useAttendeesParam();
-  const [equipment, setEquipment] = useEquipmentParam();
-  const [preferredFloor, setPreferredFloor] = usePreferredFloorParam();
+  const { date, setDate, startTime, setStartTime, endTime, setEndTime, attendees, setAttendees } =
+    useRequirementParams();
+  const { equipment, setEquipment, preferredFloor, setPreferredFloor } = usePreferenceParams();
 
   return (
     <div>

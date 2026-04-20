@@ -1,10 +1,8 @@
 import { z } from 'zod';
-import { useStartTimeParam, useEndTimeParam, useAttendeesParam } from './useFilterParams';
+import { useRequirementParams } from './useFilterParams';
 
 export function useValidation() {
-  const [startTime] = useStartTimeParam();
-  const [endTime] = useEndTimeParam();
-  const [attendees] = useAttendeesParam();
+  const { startTime, endTime, attendees } = useRequirementParams();
 
   const hasTimeInputs = startTime !== '' && endTime !== '';
   let validationError: string | null = null;

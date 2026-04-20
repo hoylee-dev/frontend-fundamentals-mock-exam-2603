@@ -4,29 +4,21 @@ import { formatDate } from 'pages/shared/utils';
 
 const equipmentValues = ['tv', 'whiteboard', 'video', 'speaker'] as const;
 
-export function useDateParam() {
-  return useQueryState('date', parseAsString.withDefault(formatDate(new Date())));
+export function useRequirementParams() {
+  const [date, setDate] = useQueryState('date', parseAsString.withDefault(formatDate(new Date())));
+  const [startTime, setStartTime] = useQueryState('startTime', parseAsString.withDefault(''));
+  const [endTime, setEndTime] = useQueryState('endTime', parseAsString.withDefault(''));
+  const [attendees, setAttendees] = useQueryState('attendees', parseAsInteger.withDefault(1));
+
+  return { date, setDate, startTime, setStartTime, endTime, setEndTime, attendees, setAttendees };
 }
 
-export function useStartTimeParam() {
-  return useQueryState('startTime', parseAsString.withDefault(''));
-}
-
-export function useEndTimeParam() {
-  return useQueryState('endTime', parseAsString.withDefault(''));
-}
-
-export function useAttendeesParam() {
-  return useQueryState('attendees', parseAsInteger.withDefault(1));
-}
-
-export function useEquipmentParam() {
-  return useQueryState(
+export function usePreferenceParams() {
+  const [equipment, setEquipment] = useQueryState(
     'equipment',
     parseAsArrayOf(parseAsStringLiteral(equipmentValues)).withDefault([] as Equipment[])
   );
-}
+  const [preferredFloor, setPreferredFloor] = useQueryState('floor', parseAsInteger);
 
-export function usePreferredFloorParam() {
-  return useQueryState('floor', parseAsInteger);
+  return { equipment, setEquipment, preferredFloor, setPreferredFloor };
 }

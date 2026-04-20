@@ -16,23 +16,14 @@ import { BookingFilters } from './BookingFilters';
 import { InlineError } from './InlineError';
 import { AvailableRoomList, ConfirmButton } from './AvailableRoomList';
 import { useValidation } from './useValidation';
-import {
-  useDateParam,
-  useStartTimeParam,
-  useEndTimeParam,
-  useAttendeesParam,
-  useEquipmentParam,
-} from './useFilterParams';
+import { useRequirementParams, usePreferenceParams } from './useFilterParams';
 
 export function RoomBookingPage() {
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useResetOnFilterChange<string | null>(null);
   const [selectedRoomId, setSelectedRoomId] = useState<string | null>(null);
-  const [date] = useDateParam();
-  const [startTime] = useStartTimeParam();
-  const [endTime] = useEndTimeParam();
-  const [attendees] = useAttendeesParam();
-  const [equipment] = useEquipmentParam();
+  const { date, startTime, endTime, attendees } = useRequirementParams();
+  const { equipment } = usePreferenceParams();
 
   const queryClient = useQueryClient();
   const { validationError, isFilterValid } = useValidation();

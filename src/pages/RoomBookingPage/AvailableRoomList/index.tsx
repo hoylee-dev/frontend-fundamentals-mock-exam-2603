@@ -3,14 +3,7 @@ import { useSuspenseQueries } from '@tanstack/react-query';
 import { Spacing, Text } from '_tosslib/components';
 import { colors } from '_tosslib/constants/colors';
 import { roomsQuery, reservationsQuery } from 'pages/shared/queries/queries';
-import {
-  useDateParam,
-  useStartTimeParam,
-  useEndTimeParam,
-  useAttendeesParam,
-  useEquipmentParam,
-  usePreferredFloorParam,
-} from '../useFilterParams';
+import { useRequirementParams, usePreferenceParams } from '../useFilterParams';
 import { RoomCard } from './RoomCard';
 
 export { ConfirmButton } from './ConfirmButton';
@@ -21,12 +14,8 @@ interface AvailableRoomListProps {
 }
 
 export function AvailableRoomList({ selectedRoomId, onSelectRoom }: AvailableRoomListProps) {
-  const [date] = useDateParam();
-  const [startTime] = useStartTimeParam();
-  const [endTime] = useEndTimeParam();
-  const [attendees] = useAttendeesParam();
-  const [equipment] = useEquipmentParam();
-  const [preferredFloor] = usePreferredFloorParam();
+  const { date, startTime, endTime, attendees } = useRequirementParams();
+  const { equipment, preferredFloor } = usePreferenceParams();
 
   const [{ data: rooms }, { data: reservations }] = useSuspenseQueries({
     queries: [roomsQuery(), reservationsQuery(date)],
