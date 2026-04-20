@@ -6,8 +6,6 @@ import { roomsQuery, reservationsQuery } from 'pages/shared/queries/queries';
 import { useRequirementParams, usePreferenceParams } from '../useFilterParams';
 import { RoomCard } from './RoomCard';
 
-export { ConfirmButton } from './ConfirmButton';
-
 interface AvailableRoomListProps {
   selectedRoomId: string | null;
   onSelectRoom: (roomId: string) => void;

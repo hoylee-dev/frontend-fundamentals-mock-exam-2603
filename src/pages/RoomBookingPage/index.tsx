@@ -14,7 +14,8 @@ import { MessageBanner } from 'pages/shared/ui/MessageBanner';
 import { BackButton } from './BackButton';
 import { BookingFilters } from './BookingFilters';
 import { InlineError } from './InlineError';
-import { AvailableRoomList, ConfirmButton } from './AvailableRoomList';
+import { AvailableRoomList } from './AvailableRoomList';
+import { ConfirmButton } from './ConfirmButton';
 import { useValidation } from './useValidation';
 import { useRequirementParams, usePreferenceParams } from './useFilterParams';
 
