@@ -3,6 +3,7 @@ import { Suspense, useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
+import { z } from 'zod';
 import { Top, Spacing, Border, Text } from '_tosslib/components';
 import { colors } from '_tosslib/constants/colors';
 import { sectionPadding } from 'pages/shared/styles';
@@ -16,7 +17,6 @@ import { BookingFilters } from './BookingFilters';
 import { InlineError } from './InlineError';
 import { AvailableRoomList } from './AvailableRoomList';
 import { ConfirmButton } from './ConfirmButton';
-import { useValidation } from './useValidation';
 import { useRequirementParams, usePreferenceParams } from './useFilterParams';
 
 export function RoomBookingPage() {
@@ -27,8 +27,13 @@ export function RoomBookingPage() {
   const [preferenceParam] = usePreferenceParams();
 
   const queryClient = useQueryClient();
-  const { validationError, isFilterValid } = useValidation();
   const { mutate: createReservation, isPending: isLoading } = useMutation(createReservationMutation(queryClient));
+
+  const hasTimeInputs = requirementParam.startTime !== '' && requirementParam.endTime !== '';
+  const validationError = hasTimeInputs
+    ? bookingFilterSchema.safeParse(requirementParam).error?.issues[0].message ?? null
+    : null;
+  const isFilterValid = hasTimeInputs && !validationError;
 
   const handleBook = () => {
     if (!selectedRoomId) {
@@ -148,3 +153,13 @@ function useResetOnFilterChange<T>(initialValue: T): [T, (value: T) => void] {
 
   return [value, setValue];
 }
+
+const bookingFilterSchema = z
+  .object({
+    startTime: z.string(),
+    endTime: z.string(),
+    attendees: z.number().min(1, '참석 인원은 1명 이상이어야 합니다.'),
+  })
+  .refine(({ startTime, endTime }) => endTime > startTime, {
+    message: '종료 시간은 시작 시간보다 늦어야 합니다.',
+  });
