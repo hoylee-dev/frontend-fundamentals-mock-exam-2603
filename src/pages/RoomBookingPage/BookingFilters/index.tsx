@@ -17,9 +17,8 @@ import { FloorSelect } from './FloorSelect';
 import { ToggleButtonGroup } from './ToggleButtonGroup';
 
 export function BookingFilters() {
-  const { date, setDate, startTime, setStartTime, endTime, setEndTime, attendees, setAttendees } =
-    useRequirementParams();
-  const { equipment, setEquipment, preferredFloor, setPreferredFloor } = usePreferenceParams();
+  const [requirementParam, setRequirementParams] = useRequirementParams();
+  const [preferenceParam, setPreferenceParams] = usePreferenceParams();
 
   return (
     <div>
@@ -29,7 +28,12 @@ export function BookingFilters() {
 
       <Spacing size={16} />
 
-      <DateFilter label="날짜" value={date} min={formatDate(new Date())} onChange={setDate} />
+      <DateFilter
+        label="날짜"
+        value={requirementParam.date}
+        min={formatDate(new Date())}
+        onChange={date => setRequirementParams({ date })}
+      />
 
       <Spacing size={14} />
 
@@ -39,8 +43,18 @@ export function BookingFilters() {
           gap: 12px;
         `}
       >
-        <TimeSelect label="시작 시간" value={startTime} options={TIME_SLOTS.slice(0, -1)} onChange={setStartTime} />
-        <TimeSelect label="종료 시간" value={endTime} options={TIME_SLOTS.slice(1)} onChange={setEndTime} />
+        <TimeSelect
+          label="시작 시간"
+          value={requirementParam.startTime}
+          options={TIME_SLOTS.slice(0, -1)}
+          onChange={startTime => setRequirementParams({ startTime })}
+        />
+        <TimeSelect
+          label="종료 시간"
+          value={requirementParam.endTime}
+          options={TIME_SLOTS.slice(1)}
+          onChange={endTime => setRequirementParams({ endTime })}
+        />
       </div>
 
       <Spacing size={14} />
@@ -51,7 +65,12 @@ export function BookingFilters() {
           gap: 12px;
         `}
       >
-        <AttendeeInput label="참석 인원" value={attendees} min={1} onChange={setAttendees} />
+        <AttendeeInput
+          label="참석 인원"
+          value={requirementParam.attendees}
+          min={1}
+          onChange={attendees => setRequirementParams({ attendees })}
+        />
         <QueryErrorBoundary FallbackComponent={ErrorFallback}>
           <Suspense fallback={<FloorSelectFallback />}>
             <SuspenseQuery
@@ -59,7 +78,12 @@ export function BookingFilters() {
               select={rooms => [...new Set(rooms.map(r => r.floor))].sort((a, b) => a - b)}
             >
               {({ data: floors }) => (
-                <FloorSelect label="선호 층" value={preferredFloor} options={floors} onChange={setPreferredFloor} />
+                <FloorSelect
+                  label="선호 층"
+                  value={preferenceParam.floor}
+                  options={floors}
+                  onChange={floor => setPreferenceParams({ floor })}
+                />
               )}
             </SuspenseQuery>
           </Suspense>
@@ -74,8 +98,8 @@ export function BookingFilters() {
           value: key,
           label: EQUIPMENT_LABELS[key],
         }))}
-        selected={equipment}
-        onChange={setEquipment}
+        selected={preferenceParam.equipment}
+        onChange={equipment => setPreferenceParams({ equipment })}
       />
     </div>
   );

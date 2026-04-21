@@ -2,13 +2,13 @@ import { z } from 'zod';
 import { useRequirementParams } from './useFilterParams';
 
 export function useValidation() {
-  const { startTime, endTime, attendees } = useRequirementParams();
+  const [requirementParam] = useRequirementParams();
 
-  const hasTimeInputs = startTime !== '' && endTime !== '';
+  const hasTimeInputs = requirementParam.startTime !== '' && requirementParam.endTime !== '';
   let validationError: string | null = null;
 
   if (hasTimeInputs) {
-    const result = bookingFilterSchema.safeParse({ startTime, endTime, attendees });
+    const result = bookingFilterSchema.safeParse(requirementParam);
     if (!result.success) {
       validationError = result.error.issues[0].message;
     }

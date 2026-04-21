@@ -23,8 +23,8 @@ export function RoomBookingPage() {
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useResetOnFilterChange<string | null>(null);
   const [selectedRoomId, setSelectedRoomId] = useState<string | null>(null);
-  const { date, startTime, endTime, attendees } = useRequirementParams();
-  const { equipment } = usePreferenceParams();
+  const [requirementParam] = useRequirementParams();
+  const [preferenceParam] = usePreferenceParams();
 
   const queryClient = useQueryClient();
   const { validationError, isFilterValid } = useValidation();
@@ -39,11 +39,11 @@ export function RoomBookingPage() {
     createReservation(
       {
         roomId: selectedRoomId,
-        date,
-        start: startTime,
-        end: endTime,
-        attendees,
-        equipment,
+        date: requirementParam.date,
+        start: requirementParam.startTime,
+        end: requirementParam.endTime,
+        attendees: requirementParam.attendees,
+        equipment: preferenceParam.equipment,
       },
       {
         onSuccess: result => {

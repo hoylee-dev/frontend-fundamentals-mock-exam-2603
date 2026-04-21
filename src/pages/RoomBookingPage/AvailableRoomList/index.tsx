@@ -12,20 +12,24 @@ interface AvailableRoomListProps {
 }
 
 export function AvailableRoomList({ selectedRoomId, onSelectRoom }: AvailableRoomListProps) {
-  const { date, startTime, endTime, attendees } = useRequirementParams();
-  const { equipment, preferredFloor } = usePreferenceParams();
+  const [requirementParam] = useRequirementParams();
+  const [preferenceParam] = usePreferenceParams();
 
   const [{ data: rooms }, { data: reservations }] = useSuspenseQueries({
-    queries: [roomsQuery(), reservationsQuery(date)],
+    queries: [roomsQuery(), reservationsQuery(requirementParam.date)],
   });
 
   const availableRooms = rooms
     .filter(room => {
-      const meetsCapacity = room.capacity >= attendees;
-      const hasRequiredEquipment = equipment.every(eq => room.equipment.includes(eq));
-      const isOnPreferredFloor = preferredFloor === null || room.floor === preferredFloor;
+      const meetsCapacity = room.capacity >= requirementParam.attendees;
+      const hasRequiredEquipment = preferenceParam.equipment.every(eq => room.equipment.includes(eq));
+      const isOnPreferredFloor = preferenceParam.floor === null || room.floor === preferenceParam.floor;
       const hasNoTimeConflict = !reservations.some(
-        r => r.roomId === room.id && r.date === date && r.start < endTime && r.end > startTime
+        r =>
+          r.roomId === room.id &&
+          r.date === requirementParam.date &&
+          r.start < requirementParam.endTime &&
+          r.end > requirementParam.startTime
       );
       return meetsCapacity && hasRequiredEquipment && isOnPreferredFloor && hasNoTimeConflict;
     })
